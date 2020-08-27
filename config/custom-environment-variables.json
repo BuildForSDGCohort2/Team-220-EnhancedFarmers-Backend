@@ -1,0 +1,6 @@
+{
+  "privatekey": "mysecretkey",
+  "dbname": "dbname",
+  "password": "password",
+  "user": "user"
+}
