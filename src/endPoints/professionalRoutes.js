@@ -4,6 +4,7 @@ import Professional from "../contrallers/professionalControls";
 
 const router = Router();
 
+router.get("/", Professional.getAll);
 router.get("/:id", Professional.getSpecificProfessionalUsingId);
 router.delete("/:id", Professional.deleteAProfessuinal);
 router.post("/signup", Professional.createProfessionalAccount);

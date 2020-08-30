@@ -7,6 +7,12 @@ import generateHash from "../helpers/generateHash";
 import generateToken from "../helpers/genrateToken";
 
 const Professional = {
+  async getAll(req, res) {
+    const getThem = await Professionals.fetchAllProfessionals();
+    if (!getThem.length) { return res.status(400).send({ status: 400, message: "No professionals yet" }); }
+
+    return res.status(200).send({ status: 200, data: getThem });
+  },
   async createProfessionalAccount(req, res) {
     const professional = _.pick(req.body,
       ["email", "fname", "lname", "contact", "residence", "profession", "password"]);
