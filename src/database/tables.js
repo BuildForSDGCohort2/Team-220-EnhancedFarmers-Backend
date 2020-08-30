@@ -27,6 +27,22 @@ const products = {
   drop: "DELETE TABLE products CASCADE;",
 };
 
+const professionsals = {
+  create: `CREATE TABLE IF NOT EXISTS professionals (
+          id int primary key auto_increment,
+          email VARCHAR(30) NOT NULL,
+          fname VARCHAR(255) NOT NULL,
+          lname VARCHAR(255) NOT NULL,
+          registered_at TIMESTAMP DEFAULT NOW(),
+          contact VARCHAR(20) NOT NULL,
+          residence VARCHAR(255) NOT NULL,
+          profession VARCHAR(255) NOT NULL,
+          password TEXT NOT NULL,
+          is_admin BOOLEAN DEFAULT false
+      );`,
+  drop: "DROP TABLE IF EXISTS professionals CASCADE;",
+};
+
 function createTableFarmers() {
   return new Promise((resolve, reject) => {
     db.query(farmers.create, (err) => {
@@ -63,9 +79,29 @@ function deleteTableProducts() {
   });
 }
 
+function createTableProfessional() {
+  return new Promise((resolve, reject) => {
+    db.query(professionsals.create, (err) => {
+      if (!err) return resolve({ message: "professionals table created" });
+      return reject(err);
+    });
+  });
+}
+
+function deleteTableProfessional() {
+  return new Promise((resolve, reject) => {
+    db.query(professionsals.drop, (err) => {
+      if (!err) return resolve({ message: "professionals table deleted" });
+      return reject(err);
+    });
+  });
+}
+
 export default {
   createTableFarmers,
   deleteTableFarmers,
   createTableProducts,
   deleteTableProducts,
+  createTableProfessional,
+  deleteTableProfessional,
 };
