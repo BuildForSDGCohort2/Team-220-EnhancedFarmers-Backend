@@ -7,12 +7,13 @@ const farmers = {
           fname VARCHAR(255) NOT NULL,
           lname VARCHAR(255) NOT NULL,
           registered_at TIMESTAMP DEFAULT NOW(),
-          is_member BOOLEAN DEFAULT false,
+          is_accepted BOOLEAN DEFAULT false,
           contact VARCHAR(20) NOT NULL,
           location VARCHAR(255) NOT NULL,
-          password TEXT NOT NULL
+          password TEXT NOT NULL,
+          imageUrl VARCHAR(255) NOT NULL
       );`,
-  drop: "DELETE TABLE  CASCADE;",
+  drop: "DROP TABLE IF EXISTS farmers  CASCADE;",
 };
 
 const products = {
@@ -24,7 +25,7 @@ const products = {
         price float NOT NULL,
         location VARCHAR(255) NOT NULL
     );`,
-  drop: "DELETE TABLE products CASCADE;",
+  drop: "DROT TABLE IF EXISTS products CASCADE;",
 };
 
 const professionsals = {
