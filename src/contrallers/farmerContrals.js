@@ -1,5 +1,5 @@
 import _ from "lodash";
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 
 import Farmer from "../database/models/farmerQueries";
 import generateHash from "../helpers/generateHash";
@@ -67,6 +67,39 @@ const FarmerContrals = {
           "location",
           "imageUrl",
         ]),
+      });
+  },
+  async loginFarmer(req, res) {
+    const loginInfo = _.pick(req.body, ["email", "password"]);
+
+    const { error } = await validate.validateLogin(loginInfo);
+    if (error) {
+      return res.status(400).send({ status: 400, message: error.details[0].message });
+    }
+
+    const findFarmer = await Farmer.findSpecificFarmer(loginInfo.email);
+    if (!findFarmer.length) {
+      return res.status(400).send({ status: 400, message: "wrogle email or password" });
+    }
+
+    const {
+      id, email, is_admin: isAdmin, password,
+    } = findFarmer[0];
+
+    const isValid = await bcrypt.compare(loginInfo.password, password);
+    if (!isValid) {
+      return res.status(400).send({ status: 400, message: "wrogle email or password" });
+    }
+
+    const token = await generateToken(id, email, isAdmin);
+
+    return res.status(200)
+      .header("x-access-token", token)
+      .header("access-control-expose-headers", "x-access-token")
+      .send({
+        status: 200,
+        token,
+        data: _.omit(findFarmer[0], ["password"]),
       });
   },
   async getSpecificFarmerUsingId(req, res) {
