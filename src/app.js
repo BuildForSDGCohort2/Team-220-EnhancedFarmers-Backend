@@ -6,12 +6,14 @@ const app = express();
 require("./startup/routes")(app);
 
 app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/index.html`);
+  res.sendFile(`${__dirname}/pages/index.html`);
 });
 
-// tables.createTableFarmers();
-// tables.createTableProducts();
-// tables.createTableProfessional();
+app.get("/investors", (req, res) => {
+  res.sendFile(`${__dirname}/pages/investor.html`);
+});
+// tables.deleteTableInvestors();
+// tables.createTableInvestors();
 
 const port = process.env.PORT || 5000;
 app.listen(port, logger.info(`listening to port ${port}`));
