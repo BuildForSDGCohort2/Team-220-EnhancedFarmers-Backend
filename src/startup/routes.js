@@ -4,6 +4,7 @@ import Products from "../endPoints/productRoutes";
 import Proffessional from "../endPoints/professionalRoutes";
 import Farmers from "../endPoints/farmerRoutes";
 import Investor from "../endPoints/investorRoutes";
+import Projects from "../endPoints/projectRoutes";
 
 require("express-async-errors");
 
@@ -18,4 +19,5 @@ module.exports = (app) => {
   app.use("/professional", Proffessional);
   app.use("/farmers", Farmers);
   app.use("/investors", Investor);
+  app.use("/projects", Projects);
 };
