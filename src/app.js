@@ -1,6 +1,6 @@
 import express from "express";
 import logger from "./helpers/logger";
-// import tables from "./database/tables";
+import tables from "./database/tables";
 
 const app = express();
 require("./startup/routes")(app);
@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
 app.get("/investors", (req, res) => {
   res.sendFile(`${__dirname}/pages/investor.html`);
 });
+tables.createTableProjects();
 // tables.deleteTableInvestors();
 // tables.createTableInvestors();
 

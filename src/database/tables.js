@@ -55,6 +55,23 @@ const investor = {
   drop: "DROP TABLE IF EXISTS investors CASCADE;",
 };
 
+const projects = {
+  create: `CREATE TABLE IF NOT EXISTS projects (
+    id int primary key auto_increment,
+    farmer_id INT REFERENCES farmers (id)  ON DELETE CASCADE,
+    profesional_id INT REFERENCES professionals (id) ON DELETE CASCADE,
+    investor_id INT REFERENCES investors (id) ON DELETE CASCADE,
+    product_category VARCHAR(100) NOT NULL,
+    amount FLOAT NOT NULL,
+    max_amount FLOAT NOT NULL,
+    created_on TIMESTAMP DEFAULT NOW(),
+    end_time DATETIME,
+    description TEXT,
+    is_progress BOOLEAN DEFAULT TRUE
+    )`,
+  delete: "DROP TABLE IF EXISTS projects CASCADE",
+};
+
 function createTableFarmers() {
   return new Promise((resolve, reject) => {
     db.query(farmers.create, (err) => {
@@ -127,6 +144,23 @@ function deleteTableInvestors() {
   });
 }
 
+function createTableProjects() {
+  return new Promise((resolve, reject) => {
+    db.query(projects.create, (err) => {
+      if (!err) return resolve({ message: "investors table created" });
+      return reject(err);
+    });
+  });
+}
+
+function deleteTableProjects() {
+  return new Promise((resolve, reject) => {
+    db.query(projects.drop, (err) => {
+      if (!err) return resolve({ message: "investors table deleted" });
+      return reject(err);
+    });
+  });
+}
 export default {
   createTableFarmers,
   deleteTableFarmers,
@@ -136,4 +170,6 @@ export default {
   deleteTableProfessional,
   createTableInvestors,
   deleteTableInvestors,
+  createTableProjects,
+  deleteTableProjects,
 };
