@@ -17,6 +17,13 @@ const Professional = {
     const professional = _.pick(req.body,
       ["email", "fname", "lname", "contact", "residence", "profession", "password"]);
 
+    const image = req.file;
+    if (!image) {
+      return res.status(400).send({ status: 400, message: "Please select an image" });
+    }
+
+    const imageUrl = image.path;
+
     const { error } = await validate.validateSignup(professional);
     if (error) {
       return res.status(400).send({ status: 400, message: error.details[0].message });
@@ -24,6 +31,7 @@ const Professional = {
 
     // checking whether the professional is already registered
     const findProfession = await Professionals.findSpecificProfession(professional.email);
+    console.log(findProfession);
     if (findProfession.length) {
       return res
         .status(400)
@@ -32,11 +40,10 @@ const Professional = {
 
     professional.password = await generateHash(professional.password, professional.email);
     // this is where we push the data to the datebase
-    const regisiterProfessional = await Professionals.registerProfessional(professional);
+    const regisiterProfessional = await Professionals.registerProfessional(professional, imageUrl);
     const { id, email, is_admin: isAdmin } = regisiterProfessional;
 
     const token = await generateToken(id, email, isAdmin);
-
     return res.status(201)
       .header("x-access-token", token)
       .header("access-control-expose-headers", "x-access-token")
@@ -44,7 +51,7 @@ const Professional = {
         status: 201,
         token,
         data: _.pick(regisiterProfessional,
-          ["email", "fname", "lname", "contact", "residence", "profession"]),
+          ["id", "email", "fname", "lname", "contact", "residence", "profession"]),
       });
   },
   async signInAprofessional(req, res) {
@@ -97,7 +104,7 @@ const Professional = {
     return res.status(200).send({
       status: 200,
       data: _.pick(getProfessional[0],
-        ["email", "fname", "lname", "contact", "residence", "profession"]),
+        ["email", "fname", "lname", "contact", "residence", "profession", "imageUrl"]),
     });
   },
 

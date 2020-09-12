@@ -20,10 +20,11 @@ const products = {
   create: `CREATE TABLE IF NOT EXISTS products (
         id INT PRIMARY KEY AUTO_INCREMENT,
         farmer_id int REFERENCES farmers(id) ON DELETE CASCADE,
-        product_category VARCHAR(30) NOT NULL,
+        project_id INT REFERENCES projects (id) ON DELEETE CASCADE,
+        category VARCHAR(150) NOT NULL,
         quantity int NOT NULL,
-        price float NOT NULL,
-        location VARCHAR(255) NOT NULL
+        price FLOAT NOT NULL
+        imageUrl VARVHAR(255) NOT NULL
     );`,
   drop: "DROT TABLE IF EXISTS products CASCADE;",
 };
@@ -39,7 +40,8 @@ const professionsals = {
           residence VARCHAR(255) NOT NULL,
           profession VARCHAR(255) NOT NULL,
           password TEXT NOT NULL,
-          is_admin BOOLEAN DEFAULT false
+          is_admin BOOLEAN DEFAULT false,
+          imageUrl VARCHAR(255) NOT NULL
       );`,
   drop: "DROP TABLE IF EXISTS professionals CASCADE;",
 };

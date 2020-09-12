@@ -6,7 +6,7 @@ const ValidateProfession = {
       email: Joi.string().email().required(),
       fname: Joi.string().required(),
       lname: Joi.string().required(),
-      contact: Joi.number().required(),
+      contact: Joi.string().required(),
       residence: Joi.string().required(),
       profession: Joi.string().required(),
       password: Joi.string().required(),
