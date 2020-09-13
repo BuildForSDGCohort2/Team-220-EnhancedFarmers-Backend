@@ -66,6 +66,26 @@ const ProjectContrals = {
     return res.status(200).send({ status: 200, data: checkAvailableProject[0] });
   },
 
+  async getProjectsSupervisedByTheSameProfessional(req, res) {
+    const proId = req.params.id;
+
+    if (!proId) {
+      return res.status(404).send({ status: 404, message: "Id must Be Provided" });
+    }
+
+    const checkProfesionalAvailable = await Profesional.findProUsingId(proId);
+    if (!checkProfesionalAvailable.length) {
+      return res.status(400).send({ status: 400, message: "Invalid Profesional Provided" });
+    }
+
+    const getProjects = await ProjectModel.getProjectBySameProffesional(proId);
+    if (!getProjects.length) {
+      return res.status(404).send({ status: 404, message: "Project of that id is not fount" });
+    }
+
+    return res.status(200).send({ status: 200, data: getProjects[0] });
+  },
+
 };
 
 export default ProjectContrals;

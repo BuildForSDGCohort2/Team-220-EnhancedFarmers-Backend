@@ -66,6 +66,34 @@ const ProjectModel = {
     });
   },
 
+  getProjectBySameProffesional(id) {
+    return new Promise((resolve, reject) => {
+      const queryText = `SELECT 
+      CONCAT(f.fname, ' ', f.lname) AS Farmer,
+      CONCAT(pro.fname, ' ', pro.lname) AS Professional,
+      i.company_name AS Investor,
+      p.product_category AS category,
+      p.amount AS InvestedAmount,
+      p.max_amount AS MaxAmountToInvest,
+      p.end_time AS harvestPeriod,
+      p.description AS Description
+        FROM projects p
+        INNER JOIN farmers f
+      ON p.farmer_id = f.id
+        INNER JOIN investors i
+      ON p.investor_id = i.id
+        INNER JOIN professionals pro
+      ON p.profesional_id = pro.id
+        WHERE  p.profesional_id = ?;`;
+      db.query(queryText, [id], (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(rows);
+      });
+    });
+  },
+
   deleteSpecificProject(id) {
     return new Promise((resolve, reject) => {
       const queryText = "DELETE FROM projects WHERE id = ?";
