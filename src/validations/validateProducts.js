@@ -5,6 +5,7 @@ const ProductValidation = {
     const schema = Joi.object().keys({
       farmer_id: Joi.number().required(),
       project_id: Joi.number().required(),
+      name: Joi.string().required(),
       category: Joi.string().required(),
       quantity: Joi.number().required(),
       price: Joi.number().required(),

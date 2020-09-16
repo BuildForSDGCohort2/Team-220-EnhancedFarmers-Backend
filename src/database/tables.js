@@ -21,6 +21,7 @@ const products = {
         id INT PRIMARY KEY AUTO_INCREMENT,
         farmer_id int REFERENCES farmers(id) ON DELETE CASCADE,
         project_id INT REFERENCES projects (id) ON DELEETE CASCADE,
+        name VARCHAR(255) NOT NULL,
         category VARCHAR(150) NOT NULL,
         quantity int NOT NULL,
         price FLOAT NOT NULL
@@ -64,6 +65,7 @@ const projects = {
     profesional_id INT REFERENCES professionals (id) ON DELETE CASCADE,
     investor_id INT REFERENCES investors (id) ON DELETE CASCADE,
     product_category VARCHAR(100) NOT NULL,
+    name VARCHAR(250) NOT NULL,
     amount FLOAT NOT NULL,
     max_amount FLOAT NOT NULL,
     created_on TIMESTAMP DEFAULT NOW(),
@@ -157,7 +159,7 @@ function createTableProjects() {
 
 function deleteTableProjects() {
   return new Promise((resolve, reject) => {
-    db.query(projects.drop, (err) => {
+    db.query(projects.delete, (err) => {
       if (!err) return resolve({ message: "investors table deleted" });
       return reject(err);
     });

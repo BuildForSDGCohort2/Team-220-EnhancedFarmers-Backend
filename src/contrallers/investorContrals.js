@@ -22,7 +22,7 @@ const InvestorContrals = {
     ]);
 
     // capturing the image loaded by the investor
-    const logo = await req.file;
+    const logo = req.file;
     if (!logo) { return res.status(400).send({ status: 400, message: "Please select a logo" }); }
     const logoUrl = logo.path;
 

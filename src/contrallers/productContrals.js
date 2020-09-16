@@ -15,7 +15,7 @@ const ProductContraller = {
   },
   async createProductReadyTosell(req, res) {
     const product = _.pick(req.body,
-      ["farmer_id", "project_id", "category", "quantity", "price"]);
+      ["farmer_id", "project_id","name", "category", "quantity", "price"]);
 
     const image = req.file;
     if (!image) {

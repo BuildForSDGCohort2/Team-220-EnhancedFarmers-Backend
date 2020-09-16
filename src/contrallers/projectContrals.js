@@ -7,9 +7,18 @@ import Investor from "../database/models/investorsModel";
 import Profesional from "../database/models/professionalQueries";
 
 const ProjectContrals = {
+  async fetchAllProjects(req, res) {
+    const getAll = await ProjectModel.fetchAllProjects();
+
+    if (!getAll.length) {
+      return res.status(400).send({ status: 400, message: "No projects yet" });
+    }
+
+    return res.status(200).send({ status: 200, data: getAll });
+  },
   async registerProject(req, res) {
     const project = _.pick(req.body, ["farmer_id",
-      "profesional_id", "investor_id", "product_category",
+      "profesional_id", "investor_id", "name", "product_category",
       "amount", "max_amount", "end_time", "description"]);
 
     const { error } = await validate.validateProjectCreation(project);

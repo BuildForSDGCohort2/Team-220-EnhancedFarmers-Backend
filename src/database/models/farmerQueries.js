@@ -74,7 +74,7 @@ const FarmerModel = {
   },
   fetchAllFarmers() {
     return new Promise((resolve, reject) => {
-      const text = "SELECT id,email,fname,lname,location,is_accepted FROM farmers ORDER BY registered_at DESC;";
+      const text = "SELECT id,email,CONCAT(fname,' ',lname) AS name,location,is_accepted FROM farmers ORDER BY registered_at DESC;";
       db.query(text, (err, rows) => {
         if (err) { return reject(err); }
         return resolve(rows);

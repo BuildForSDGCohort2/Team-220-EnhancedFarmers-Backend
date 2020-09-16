@@ -3,10 +3,11 @@ import db from "../connection";
 const ProductModel = {
   createProductForSell: (rowData, imageUrl) => new Promise((resolve, reject) => {
     const queryText = `INSERT INTO products 
-    ( farmer_id,project_id,category,quantity,price,imageUrl)
+    ( farmer_id,project_id,name,category,quantity,price,imageUrl)
       values(
           "${rowData.farmer_id}",
           "${rowData.project_id}",
+          "${rowData.name}",
           "${rowData.category}",
           "${rowData.quantity}",
           "${rowData.price}",

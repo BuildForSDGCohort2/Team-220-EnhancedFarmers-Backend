@@ -1,6 +1,6 @@
 import db from "../connection";
 
-const FarmerModel = {
+const InvestorModel = {
   registerAnInvestor(rowData, logoUrl) {
     return new Promise((resolve, reject) => {
       const queryText = `INSERT INTO investors ( email,company_name,contact,password,logoUrl)
@@ -72,7 +72,7 @@ const FarmerModel = {
   },
   fetchAllInvestors() {
     return new Promise((resolve, reject) => {
-      const text = "SELECT id,email, company_name AS Company, contact FROM investors;";
+      const text = "SELECT id,email, company_name AS name, contact FROM investors;";
       db.query(text, (err, rows) => {
         if (err) { return reject(err); }
         return resolve(rows);
@@ -81,4 +81,4 @@ const FarmerModel = {
   },
 };
 
-export default FarmerModel;
+export default InvestorModel;
