@@ -16,6 +16,7 @@
   "homepage": "https://github.com/BuildForSDGCohort2/Team-220-EnhancedFarmers-Backend#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "codacy-coverage": "^3.4.0",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
