@@ -136,9 +136,10 @@ const FarmerContrals = {
         .status(404)
         .send({ status: 404, message: "farmer of that id is not found" });
     }
-    if (isAccepted.is_accepted === true) isAccepted.is_accepted = 1;
-    else isAccepted.is_accepted = 0;
 
+    if (isAccepted.is_accepted === "true") isAccepted.is_accepted = 1;
+    else isAccepted.is_accepted = 0;
+    
     await Farmer.approveFarmerToMember(farmerId, isAccepted.is_accepted);
 
     return res.status(200).send({ status: 200, message: "Farmer approved successfully" });

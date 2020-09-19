@@ -33,7 +33,7 @@ const products = {
 const professionsals = {
   create: `CREATE TABLE IF NOT EXISTS professionals (
           id int primary key auto_increment,
-          email VARCHAR(30) NOT NULL,
+          email VARCHAR(30)  UNIQUE NOT NULL,
           fname VARCHAR(255) NOT NULL,
           lname VARCHAR(255) NOT NULL,
           registered_at TIMESTAMP DEFAULT NOW(),
@@ -43,6 +43,19 @@ const professionsals = {
           password TEXT NOT NULL,
           is_admin BOOLEAN DEFAULT false,
           imageUrl VARCHAR(255) NOT NULL
+      );`,
+  insert: `INSERT INTO professionals (email,fname,lname,contact,residence,
+      profession,password,is_admin,imageUrl)
+      VALUES(
+        "mugabamuha@gmail.com",
+        "Rashid",
+        "Mugaba",
+        "057688967",
+        "Kampala",
+        "admin",
+       "$2b$20$IAJR.2MbWtkU2jU608gdY.l05/uTMAvrzyvT91Uzz9lTTWdryVHne",
+        1,
+        "/uploads/image"
       );`,
   drop: "DROP TABLE IF EXISTS professionals CASCADE;",
 };
@@ -69,11 +82,23 @@ const projects = {
     amount FLOAT NOT NULL,
     max_amount FLOAT NOT NULL,
     created_on TIMESTAMP DEFAULT NOW(),
-    end_time DATETIME,
+    end_time DATE,
     description TEXT,
     is_progress BOOLEAN DEFAULT TRUE
     )`,
   delete: "DROP TABLE IF EXISTS projects CASCADE",
+};
+
+const customers = {
+  create: `CREATE TABLE IF NOT EXISTS customers (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password TEXT NOT NULL,
+    registered_on DATETIME NOT NULL default now(),
+    imageUrl VARCHAR(255)
+  );`,
+  delete: "DROP TABLE IF EXISTS customers CASCADE",
 };
 
 function createTableFarmers() {
@@ -165,6 +190,34 @@ function deleteTableProjects() {
     });
   });
 }
+
+function createTableCustomers() {
+  return new Promise((resolve, reject) => {
+    db.query(customers.create, (err) => {
+      if (!err) return resolve({ message: "investors table created" });
+      return reject(err);
+    });
+  });
+}
+
+function deleteTableCustomers() {
+  return new Promise((resolve, reject) => {
+    db.query(customers.delete, (err) => {
+      if (!err) return resolve({ message: "investors table deleted" });
+      return reject(err);
+    });
+  });
+}
+
+function createAdmin() {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
+    await db.query(professionsals.insert, (err) => {
+      if (!err) return resolve({ message: "Admin Created" });
+      return reject(err);
+    });
+  });
+}
 export default {
   createTableFarmers,
   deleteTableFarmers,
@@ -176,4 +229,7 @@ export default {
   deleteTableInvestors,
   createTableProjects,
   deleteTableProjects,
+  createTableCustomers,
+  deleteTableCustomers,
+  createAdmin,
 };

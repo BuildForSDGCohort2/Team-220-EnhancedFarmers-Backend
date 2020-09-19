@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import config from "config";
 
-const generateToken = (id, email, isAdmin) => {
+const generateToken = (id, email, username) => {
   const token = jwt.sign(
     {
       id,
       email,
-      isAdmin,
+      username,
     },
     config.get("privatekey")
   );

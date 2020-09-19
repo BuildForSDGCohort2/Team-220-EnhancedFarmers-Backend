@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-// import config from "config";
+import config from "config";
 
 const generateToken = (id, email, isAccepted) => {
   const token = jwt.sign(
@@ -8,7 +8,7 @@ const generateToken = (id, email, isAccepted) => {
       email,
       isAccepted,
     },
-    "secretTempKey",
+    config.get("privatekey")
   );
   return token;
 };
