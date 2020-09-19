@@ -4,7 +4,7 @@ import Projects from "../contrallers/projectContrals";
 
 const router = Router();
 
-router.post("/", Projects.registerProject);
+router.post("/create", Projects.registerProject);
 
 router.get("/", Projects.fetchAllProjects);
 

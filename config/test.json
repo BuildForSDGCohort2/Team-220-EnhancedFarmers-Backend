@@ -2,6 +2,5 @@
   "dbname": "",
   "password": "",
   "user": "",
-  "host": "localhost",
-  "provatekey": ""
+  "host": "localhost"
 }

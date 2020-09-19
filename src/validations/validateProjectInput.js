@@ -6,6 +6,7 @@ const ValidateProject = {
       farmer_id: Joi.number().required(),
       profesional_id: Joi.number().required(),
       investor_id: Joi.number().required(),
+      name: Joi.string().required(),
       product_category: Joi.string().required(),
       amount: Joi.number().required(),
       max_amount: Joi.number().required(),

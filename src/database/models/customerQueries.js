@@ -1,19 +1,16 @@
 import db from "../connection";
 
-const FarmerModel = {
-  registerFarmer(rowData, imageUrl) {
+const CustomerModel = {
+  registerCustomers(rowData, imageUrl) {
     return new Promise((resolve, reject) => {
-      const queryText = `INSERT INTO farmers ( email,fname,lname,contact,location,password,imageUrl)
+      const queryText = `INSERT INTO customers ( email ,username,password,imageUrl)
       values(
           "${rowData.email}",
-          "${rowData.fname}",
-          "${rowData.lname}",
-          "${rowData.contact}",
-          "${rowData.location}",
+          "${rowData.username}",
           "${rowData.password}",
           "${imageUrl}"
       );
-      SELECT * FROM farmers WHERE id=(SELECT LAST_INSERT_ID())`;
+      SELECT * FROM customers WHERE id=(SELECT LAST_INSERT_ID())`;
 
       db.query(queryText, (err, rows) => {
         if (err) {
@@ -23,9 +20,9 @@ const FarmerModel = {
       });
     });
   },
-  findSpecificFarmer(email) {
+  findSpecificCustomer(email) {
     return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM farmers where email = ?";
+      const queryText = " SELECT * FROM customers where email = ?";
 
       db.query(queryText, [email], (err, rows) => {
         if (err) {
@@ -35,9 +32,10 @@ const FarmerModel = {
       });
     });
   },
-  findFarmerUsingId(id) {
+
+  updatePassword(id, password) {
     return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM farmers where id = ?";
+      const queryText = `UPDATE customers SET password = "${password}" WHERE id =?`;
 
       db.query(queryText, [id], (err, rows) => {
         if (err) {
@@ -48,9 +46,9 @@ const FarmerModel = {
     });
   },
 
-  approveFarmerToMember(id, member) {
+  findCustomersUsingId(id) {
     return new Promise((resolve, reject) => {
-      const queryText = `UPDATE farmers SET is_accepted = "${member}" WHERE id = ?`;
+      const queryText = " SELECT * FROM customers where id = ?";
 
       db.query(queryText, [id], (err, rows) => {
         if (err) {
@@ -60,9 +58,10 @@ const FarmerModel = {
       });
     });
   },
-  deleteSpecificFarmer(id) {
+
+  deleteSpecificCustomer(id) {
     return new Promise((resolve, reject) => {
-      const queryText = "DELETE FROM farmers WHERE id = ?";
+      const queryText = "DELETE FROM customers WHERE id = ?";
 
       db.query(queryText, [id], (err, rows) => {
         if (err) {
@@ -72,7 +71,8 @@ const FarmerModel = {
       });
     });
   },
-  fetchAllFarmers() {
+
+  fetchAllCustomers() {
     return new Promise((resolve, reject) => {
       const text = `SELECT 
       id,
@@ -84,11 +84,13 @@ const FarmerModel = {
       FROM farmers 
       ORDER BY registered_at DESC;`;
       db.query(text, (err, rows) => {
-        if (err) { return reject(err); }
+        if (err) {
+          return reject(err);
+        }
         return resolve(rows);
       });
     });
   },
 };
 
-export default FarmerModel;
+export default CustomerModel;

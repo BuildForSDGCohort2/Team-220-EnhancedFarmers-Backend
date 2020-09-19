@@ -116,14 +116,14 @@ const ProjectModel = {
       const text = `SELECT 
       p.id,
       p.name AS name,
-      CONCAT(f.fname, ' ', f.lname) AS Farmer,
-      CONCAT(pro.fname, ' ', pro.lname) AS Professional,
-      i.company_name AS Investor,
+      CONCAT(f.fname, ' ', f.lname) AS farmer,
+      CONCAT(pro.fname, ' ', pro.lname) AS professional,
+      i.company_name AS investor,
       p.product_category AS category,
-      p.amount AS InvestedAmount,
-      p.max_amount AS MaxAmountToInvest,
+      p.amount AS investedAmount,
+      p.max_amount AS maxAmountToInvest,
       p.end_time AS harvestPeriod,
-      p.description AS Description
+      p.description AS description
         FROM projects p
         INNER JOIN farmers f
       ON p.farmer_id = f.id

@@ -30,8 +30,9 @@ describe("Test Tokens", () => {
     expect(decoded).toMatchObject(obj);
   });
 
-  it("It should return a password hash", () => {
+  it("It should return a password hash", async () => {
     const hash = "hkdfhkhfkshbv734nxu47cbh884";
-    expect(generateHash("hello", "email@email.com")).not.toBe(hash);
+    const result = await generateHash("hello", "email@email.com");
+    expect(result).not.toBe(hash);
   });
 });
