@@ -20,7 +20,7 @@ const products = {
   create: `CREATE TABLE IF NOT EXISTS products (
         id INT PRIMARY KEY AUTO_INCREMENT,
         farmer_id int REFERENCES farmers(id) ON DELETE CASCADE,
-        project_id INT REFERENCES projects (id) ON DELEETE CASCADE,
+        project_id INT REFERENCES projects (id) ON DELETE CASCADE,
         name VARCHAR(255) NOT NULL,
         category VARCHAR(150) NOT NULL,
         quantity int NOT NULL,
