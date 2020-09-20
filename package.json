@@ -4,7 +4,11 @@
   "description": "[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6506934b2237414b96668e79a7c26e31)](https://app.codacy.com/gh/BuildForSDGCohort2/Team-220-EnhancedFarmers-Backend?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDGCohort2/Team-220-EnhancedFarmers-Backend&utm_campaign=Badge_Grade_Settings)",
   "main": "app.js",
   "scripts": {
-    "start": "babel-node src/app.js",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run build-babel",
+    "start": "npm run build && node ./build/app.js",
+    "dev2": "babel-node src/app.js",
     "dev": "nodemon src/app.js --exec babel-node",
     "test": "jest --watchAll --verbose"
   },
@@ -40,6 +44,7 @@
     "@babel/core": "^7.11.4",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
