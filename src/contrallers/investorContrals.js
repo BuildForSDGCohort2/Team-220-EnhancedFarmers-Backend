@@ -9,7 +9,10 @@ import generateToken from "../helpers/genrateToken";
 const InvestorContrals = {
   async getAllInvestor(req, res) {
     const allInvestors = await Investor.fetchAllInvestors();
-    if (!allInvestors.length) { return res.status(400).send({ status: 400, message: "No Investors yet" }); }
+
+    if (!allInvestors.length) {
+      return res.status(400).send({ status: 400, message: "No Investors yet" });
+    }
 
     return res.status(200).send({ status: 200, data: allInvestors });
   },
@@ -23,7 +26,11 @@ const InvestorContrals = {
 
     // capturing the image loaded by the investor
     const logo = req.file;
-    if (!logo) { return res.status(400).send({ status: 400, message: "Please select a logo" }); }
+    if (!logo) {
+      return res
+        .status(400)
+        .send({ status: 400, message: "Please select a logo" });
+    }
     const logoUrl = logo.path;
 
     const { error } = await validate.validateInvestorInput(investor);
@@ -43,7 +50,10 @@ const InvestorContrals = {
 
     investor.password = await generateHash(investor.password, investor.email);
     // this is where we push the data to the datebase
-    const regisiterinvestor = await Investor.registerAnInvestor(investor, logoUrl);
+    const regisiterinvestor = await Investor.registerAnInvestor(
+      investor,
+      logoUrl
+    );
 
     const { id, email, is_admin: isAdmin } = regisiterinvestor;
 
@@ -70,26 +80,31 @@ const InvestorContrals = {
 
     const { error } = await validate.validateLogin(loginInfo);
     if (error) {
-      return res.status(400).send({ status: 400, message: error.details[0].message });
+      return res
+        .status(400)
+        .send({ status: 400, message: error.details[0].message });
     }
 
     const findInvestor = await Investor.findSpecificInvestor(loginInfo.email);
     if (!findInvestor.length) {
-      return res.status(400).send({ status: 400, message: "wrogle email or password" });
+      return res
+        .status(400)
+        .send({ status: 400, message: "wrogle email or password" });
     }
 
-    const {
-      id, email, is_admin: isAdmin, password,
-    } = findInvestor[0];
+    const { id, email, is_admin: isAdmin, password } = findInvestor[0];
 
     const isValid = await bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
-      return res.status(400).send({ status: 400, message: "wrogle email or password" });
+      return res
+        .status(400)
+        .send({ status: 400, message: "wrogle email or password" });
     }
 
     const token = await generateToken(id, email, isAdmin);
 
-    return res.status(200)
+    return res
+      .status(200)
       .header("x-access-token", token)
       .header("access-control-expose-headers", "x-access-token")
       .send({
@@ -124,45 +139,55 @@ const InvestorContrals = {
     const investorId = req.params.id;
 
     if (!investorId) {
-      return res.status(400)
+      return res
+        .status(400)
         .send({ status: 400, message: " Investor id must be provied" });
     }
 
     const checkInvestorExists = await Investor.findInvestorUsingId(investorId);
     if (!checkInvestorExists.length) {
-      return res.status(404)
-        .send({ status: 404, message: "Sorry Investor with that id doesnot exist" });
+      return res.status(404).send({
+        status: 404,
+        message: "Sorry Investor with that id doesnot exist",
+      });
     }
 
     await Investor.deleteSpecificInvestor(investorId);
 
-    return res.status(200).send({ status: 200, message: "Investor deleted successfully" });
+    return res
+      .status(200)
+      .send({ status: 200, message: "Investor deleted successfully" });
   },
 
   async updateInvestorContact(req, res) {
     const { contact } = req.body;
     const investorId = req.params.id;
     if (!contact) {
-      return res.status(400)
+      return res
+        .status(400)
         .send({ status: 400, message: "contact must give" });
     }
 
     if (!investorId) {
-      return res.status(400)
+      return res
+        .status(400)
         .send({ status: 400, message: "contact must give" });
     }
 
     const checkInvestor = await Investor.findInvestorUsingId(investorId);
     if (!checkInvestor) {
-      return res.status(404)
-        .send({ status: 404, message: "Investor your updating does not exist" });
+      return res.status(404).send({
+        status: 404,
+        message: "Investor your updating does not exist",
+      });
     }
 
     await Investor.updateInvestorContact(investorId, contact);
 
-    return res.status(200).send({ status: 200, message: "Contact updsted successfully" });
+    return res
+      .status(200)
+      .send({ status: 200, message: "Contact updsted successfully" });
   },
-
 };
 
 export default InvestorContrals;
