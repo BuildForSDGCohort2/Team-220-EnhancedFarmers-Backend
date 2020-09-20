@@ -5,7 +5,7 @@ import logger from "../helpers/logger";
 
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: "localhost",
+  host: config.get("host"),
   user: config.get("user"),
   password: config.get("password"),
   database: config.get("dbname"),
