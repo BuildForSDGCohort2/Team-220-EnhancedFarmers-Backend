@@ -25,7 +25,7 @@ const products = {
         category VARCHAR(150) NOT NULL,
         quantity int NOT NULL,
         price FLOAT NOT NULL
-        imageUrl VARVHAR(255) NOT NULL
+        imageUrl VARCHAR(255) NOT NULL
     );`,
   drop: "DROT TABLE IF EXISTS products CASCADE;",
 };
