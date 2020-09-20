@@ -10,7 +10,7 @@ t.createTableFarmers();
 t.createTableInvestors();
 t.createTableProjects();
 // t.createTableProducts();
-t.createTableCustomers();
+// t.createTableCustomers();
 
 const port = process.env.PORT || 5000;
 const server = app.listen(port, logger.info(`listening to port ${port}`));
