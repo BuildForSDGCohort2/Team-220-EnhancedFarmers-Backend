@@ -211,8 +211,8 @@ function deleteTableCustomers() {
 
 function createAdmin() {
   // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve, reject) => {
-    await db.query(professionsals.insert, (err) => {
+  return new Promise((resolve, reject) => {
+    db.query(professionsals.insert, (err) => {
       if (!err) return resolve({ message: "Admin Created" });
       return reject(err);
     });
