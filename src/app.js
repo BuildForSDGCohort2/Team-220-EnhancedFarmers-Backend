@@ -13,6 +13,7 @@ t.createTableProjects();
 // t.createTableCustomers();
 
 const port = process.env.PORT || 5000;
+socket = io.listen(process.env.PORT);
 const server = app.listen(port, logger.info(`listening to port ${port}`));
 
 module.exports = server;
