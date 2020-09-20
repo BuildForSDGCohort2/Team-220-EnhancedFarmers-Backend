@@ -6,10 +6,6 @@ import Investor from "../contrallers/investorContrals";
 
 const router = Router();
 
-router.post("/register", upload.single("image"), Investor.registerInvestor);
-
-router.post("/login", Investor.loginInvesttor);
-
 router.get("/", Investor.getAllInvestor);
 
 router.get("/:id", Investor.getInvestorDetails);
@@ -17,5 +13,9 @@ router.get("/:id", Investor.getInvestorDetails);
 router.delete("/:id", Investor.removeSpecificInvestor);
 
 router.patch("/:id/contact", Investor.updateInvestorContact);
+
+router.post("/register", upload.single("image"), Investor.registerInvestor);
+
+router.post("/login", Investor.loginInvesttor);
 
 export default router;
