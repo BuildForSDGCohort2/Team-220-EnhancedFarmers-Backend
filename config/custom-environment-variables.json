@@ -3,5 +3,6 @@
   "dbname": "dbname",
   "password": "password",
   "user": "user",
-  "host": "host"
+  "host": "host",
+  "port": "port"
 }

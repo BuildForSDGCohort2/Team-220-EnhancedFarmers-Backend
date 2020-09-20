@@ -9,7 +9,7 @@ t.createTableProfessional();
 t.createTableFarmers();
 t.createTableInvestors();
 t.createTableProjects();
-t.createTableProducts();
+// t.createTableProducts();
 t.createTableCustomers();
 
 const port = process.env.PORT || 5000;

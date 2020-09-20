@@ -2,5 +2,6 @@
   "dbname": "",
   "password": "",
   "user": "",
-  "host": "localhost"
+  "host": "localhost",
+  "port": ""
 }

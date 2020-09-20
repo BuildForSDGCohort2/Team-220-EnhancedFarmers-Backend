@@ -3,5 +3,6 @@
   "password": "",
   "user": "",
   "host": "localhost",
-  "provatekey": ""
+  "provatekey": "",
+  "port": ""
 }
