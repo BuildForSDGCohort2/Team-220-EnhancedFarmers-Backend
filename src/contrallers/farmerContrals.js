@@ -9,11 +9,13 @@ import validate from "../validations/validateFarmerInput";
 const FarmerContrals = {
   async getAllFarmers(req, res) {
     const allFarmers = await Farmer.fetchAllFarmers();
-    if (!allFarmers.length) { return res.status(400).send({ status: 400, message: "No farmers yet" }); }
+    if (!allFarmers.length) {
+      return res.status(400).send({ status: 400, message: "No farmers yet" });
+    }
 
     return res.status(200).send({ status: 200, data: allFarmers });
   },
-  registerNewFarmer: async (req, res) => {
+  async registerNewFarmer(req, res) {
     const farmer = _.pick(req.body, [
       "email",
       "fname",
@@ -25,7 +27,11 @@ const FarmerContrals = {
 
     // capturing the image loaded by the farmer
     const image = await req.file;
-    if (!image) { return res.status(400).send({ status: 400, message: "Please select sn image" }); }
+    if (!image) {
+      return res
+        .status(400)
+        .send({ status: 400, message: "Please select sn image" });
+    }
     const imageUrl = image.path;
 
     const { error } = await validate.validateSignup(farmer);
@@ -74,26 +80,31 @@ const FarmerContrals = {
 
     const { error } = await validate.validateLogin(loginInfo);
     if (error) {
-      return res.status(400).send({ status: 400, message: error.details[0].message });
+      return res
+        .status(400)
+        .send({ status: 400, message: error.details[0].message });
     }
 
     const findFarmer = await Farmer.findSpecificFarmer(loginInfo.email);
     if (!findFarmer.length) {
-      return res.status(400).send({ status: 400, message: "wrogle email or password" });
+      return res
+        .status(400)
+        .send({ status: 400, message: "wrogle email or password" });
     }
 
-    const {
-      id, email, is_admin: isAdmin, password,
-    } = findFarmer[0];
+    const { id, email, is_admin: isAdmin, password } = findFarmer[0];
 
     const isValid = await bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
-      return res.status(400).send({ status: 400, message: "wrogle email or password" });
+      return res
+        .status(400)
+        .send({ status: 400, message: "wrogle email or password" });
     }
 
     const token = await generateToken(id, email, isAdmin);
 
-    return res.status(200)
+    return res
+      .status(200)
       .header("x-access-token", token)
       .header("access-control-expose-headers", "x-access-token")
       .send({
@@ -128,7 +139,11 @@ const FarmerContrals = {
     const farmerId = req.params.id;
 
     const { error } = await validate.validateApproveFarmer(isAccepted);
-    if (error) { return res.status(400).send({ status: 400, message: error.details[0].message }); }
+    if (error) {
+      return res
+        .status(400)
+        .send({ status: 400, message: error.details[0].message });
+    }
 
     const checkFarmer = await Farmer.findFarmerUsingId(farmerId);
     if (!checkFarmer.length) {
@@ -139,29 +154,38 @@ const FarmerContrals = {
 
     if (isAccepted.is_accepted === "true") isAccepted.is_accepted = 1;
     else isAccepted.is_accepted = 0;
-    
+
     await Farmer.approveFarmerToMember(farmerId, isAccepted.is_accepted);
 
-    return res.status(200).send({ status: 200, message: "Farmer approved successfully" });
+    return res
+      .status(200)
+      .send({ status: 200, message: "Farmer approved successfully" });
   },
 
   async removeSpecificFarmer(req, res) {
     const farmerId = req.params.id;
 
     if (!farmerId) {
-      return res.status(400)
+      return res
+        .status(400)
         .send({ status: 400, message: " Farmer id must be provied" });
     }
 
     const checkFarmerExists = await Farmer.findFarmerUsingId(farmerId);
     if (!checkFarmerExists.length) {
-      return res.status(404)
-        .send({ status: 404, message: "Sorry farmer with that id doesnot exist" });
+      return res
+        .status(404)
+        .send({
+          status: 404,
+          message: "Sorry farmer with that id doesnot exist",
+        });
     }
 
     await Farmer.deleteSpecificFarmer(farmerId);
 
-    return res.status(200).send({ status: 200, message: "Farmer deleted successfully" });
+    return res
+      .status(200)
+      .send({ status: 200, message: "Farmer deleted successfully" });
   },
 };
 

@@ -7,7 +7,7 @@ import generateHash from "../helpers/generateHash";
 import generateToken from "../helpers/generateTokenCustomers";
 
 const CustomerContrals = {
-  registerNewCustomer: async (req, res) => {
+  async registerNewCustomer(req, res) {
     const customer = _.pick(req.body, ["email", "username", "password"]);
 
     // capturing the image loaded by the farmer
