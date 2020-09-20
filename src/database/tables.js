@@ -24,7 +24,7 @@ const products = {
         name VARCHAR(255) NOT NULL,
         category VARCHAR(150) NOT NULL,
         quantity int NOT NULL,
-        price FLOAT NOT NULL
+        price FLOAT NOT NULL,
         imageUrl VARCHAR(255) NOT NULL
     );`,
   drop: "DROT TABLE IF EXISTS products CASCADE;",
@@ -95,7 +95,7 @@ const customers = {
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) NOT NULL,
     password TEXT NOT NULL,
-    registered_on DATETIME NOT NULL default now(),
+    registered_on TIMESTAMP NOT NULL DEFAULT NOW(),
     imageUrl VARCHAR(255)
   );`,
   delete: "DROP TABLE IF EXISTS customers CASCADE",
