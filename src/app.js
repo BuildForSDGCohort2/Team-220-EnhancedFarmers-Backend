@@ -2,10 +2,6 @@ import express from "express";
 import logger from "./helpers/logger";
 import t from "./database/tables";
 
-require("@babel/core").transform("code", {
-  presets: ["@babel/preset-es2015"],
-});
-
 const app = express();
 require("./startup/routes")(app);
 
