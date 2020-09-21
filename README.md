@@ -56,44 +56,44 @@ Now Run the application with
 
 | Method      | EndPoint                    | Description                         |
 | ----------- | --------------------------- | ----------------------------------- |
-| **_Now _**  | **_For _**                  | **Professionals**                   |
-| ~~ GET~~    | /professionals              | get all professionals               |
-| ~~ POST~~   | /professionals/signup       | register a professional             |
-| ~~ POST~~   | /professionals/login        | signin a professional               |
-| ~~ GET~~    | /professionals/:id          | get a particular professional       |
-| ~~ DELETE~~ | /professionals/:id          | delete a particular professional    |
-| **_Now _**  | **_For _**                  | **Projects**                        |
-| ~~ GET~~    | /projects                   | get all projects                    |
-| ~~ POST~~   | /projects/create            | create a projects                   |
-| ~~ GET ~~   | /projects/:id/professionals | projects watched by a professioanal |
-| ~~ GET ~~   | /projects/:id/investors     | projects for an investoer           |
-| ~~ GET~~    | /projects/:id               | get a particular projects           |
-| ~~ DELETE~~ | /projects/:id               | delete a particular project         |
-| **_Now _**  | **_For _**                  | **Products**                        |
-| ~~ GET~~    | /products                   | get all products                    |
-| ~~ POST~~   | /products                   | create a products for sell          |
-| ~~ GET ~~   | /products/category          | all products with specific category |
-| ~~ GET~~    | /products/:id               | get a particular product            |
-| ~~ DELETE~~ | /products/:id               | delete a particular product         |
-| **_Now _**  | **_For _**                  | **investors**                       |
-| ~~ GET~~    | /investors                  | get all investors                   |
-| ~~ POST~~   | /investors/rigister         | register investor                   |
-| ~~ POST~~   | /investors/login            | login investor                      |
-| ~~ PATCH~~  | /investors/:id/contact      | investor change contact             |
-| ~~ GET~~    | /investors/:id              | get a particular investor           |
-| ~~ DELETE~~ | /investors/:id              | delete a particular investor        |
-| **_Now _**  | **_For _**                  | **Farmers**                         |
-| ~~ GET~~    | /farmers                    | get all farmers                     |
-| ~~ POST~~   | /farmers/signup             | register farmer                     |
-| ~~ POST~~   | /farmers/login              | login farmer                        |
-| ~~ PATCH~~  | /farmers/:id/approve        | approve farmer                      |
-| ~~ GET~~    | /farmers/:id                | get a particular farmer             |
-| ~~ DELETE~~ | /farmers/:id                | delete a particular farmer          |
-| **_Now _**  | **_For _**                  | **customers**                       |
-| ~~ GET~~    | /customers                  | get all customers                   |
-| ~~ POST~~   | /customers/signup           | register customer                   |
-| ~~ POST~~   | /customers/login            | login customer                      |
-| ~~ PATCH~~  | /customers/password         | change password                     |
-| ~~ GET~~    | /customers/:id/orders       | get orders he has made              |
-| ~~ GET~~    | /custoers/:id               | get a particular customer           |
-| ~~ DELETE~~ | /customers/:id              | delete a particular customer        |
+| **Now **    | **For **                    | **Professionals**                   |
+| ** GET**    | /professionals              | get all professionals               |
+| ** POST**   | /professionals/signup       | register a professional             |
+| ** POST**   | /professionals/login        | signin a professional               |
+| ** GET**    | /professionals/:id          | get a particular professional       |
+| ** DELETE** | /professionals/:id          | delete a particular professional    |
+| **Now **    | **For **                    | **Projects**                        |
+| ** GET**    | /projects                   | get all projects                    |
+| ** POST**   | /projects/create            | create a projects                   |
+| ** GET **   | /projects/:id/professionals | projects watched by a professioanal |
+| ** GET **   | /projects/:id/investors     | projects for an investoer           |
+| ** GET**    | /projects/:id               | get a particular projects           |
+| ** DELETE** | /projects/:id               | delete a particular project         |
+| **Now**     | **For **                    | **Products**                        |
+| ** GET**    | /products                   | get all products                    |
+| ** POST**   | /products                   | create a products for sell          |
+| ** GET **   | /products/category          | all products with specific category |
+| ** GET**    | /products/:id               | get a particular product            |
+| ** DELETE** | /products/:id               | delete a particular product         |
+| **Now **    | **For **                    | **investors**                       |
+| ** GET**    | /investors                  | get all investors                   |
+| ** POST**   | /investors/rigister         | register investor                   |
+| ** POST**   | /investors/login            | login investor                      |
+| ** PATCH**  | /investors/:id/contact      | investor change contact             |
+| ** GET**    | /investors/:id              | get a particular investor           |
+| ** DELETE** | /investors/:id              | delete a particular investor        |
+| **Now**     | **For **                    | **Farmers**                         |
+| ** GET**    | /farmers                    | get all farmers                     |
+| ** POST**   | /farmers/signup             | register farmer                     |
+| ** POST**   | /farmers/login              | login farmer                        |
+| ** PATCH**  | /farmers/:id/approve        | approve farmer                      |
+| ** GET**    | /farmers/:id                | get a particular farmer             |
+| ** DELETE** | /farmers/:id                | delete a particular farmer          |
+| **Now **    | **For **                    | **customers**                       |
+| ** GET**    | /customers                  | get all customers                   |
+| ** POST**   | /customers/signup           | register customer                   |
+| ** POST**   | /customers/login            | login customer                      |
+| ** PATCH**  | /customers/password         | change password                     |
+| ** GET**    | /customers/:id/orders       | get orders he has made              |
+| ** GET**    | /custoers/:id               | get a particular customer           |
+| ** DELETE** | /customers/:id              | delete a particular customer        |
