@@ -39,6 +39,7 @@ const ProjectModel = {
       });
     });
   },
+
   getProjectById(id) {
     return new Promise((resolve, reject) => {
       const queryText = `SELECT 
@@ -60,6 +61,7 @@ const ProjectModel = {
         INNER JOIN professionals pro
       ON p.profesional_id = pro.id
         WHERE  p.id = ?;`;
+
       db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
@@ -90,6 +92,7 @@ const ProjectModel = {
         INNER JOIN professionals pro
       ON p.profesional_id = pro.id
         WHERE  p.profesional_id = ?;`;
+
       db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
@@ -122,7 +125,7 @@ const ProjectModel = {
       p.product_category AS category,
       p.amount AS investedAmount,
       p.max_amount AS maxAmountToInvest,
-      p.end_time AS harvestPeriod,
+      DATE_FORMAT(p.end_time,'%y-%m-%d') AS harvestPeriod,
       p.description AS description
         FROM projects p
         INNER JOIN farmers f
@@ -132,8 +135,11 @@ const ProjectModel = {
         INNER JOIN professionals pro
       ON p.profesional_id = pro.id
        ORDER BY created_on DESC;`;
+
       db.query(text, (err, rows) => {
-        if (err) { return reject(err); }
+        if (err) {
+          return reject(err);
+        }
         return resolve(rows);
       });
     });

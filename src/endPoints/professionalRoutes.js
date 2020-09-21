@@ -1,6 +1,6 @@
 import { Router } from "express";
-// import admin from "../middlewares/admin";
-// import auth from "../middlewares/auth";
+import admin from "../middlewares/admin";
+import auth from "../middlewares/auth";
 
 import Professional from "../contrallers/professionalControls";
 import upload from "../images";
@@ -15,7 +15,7 @@ router.delete("/:id", Professional.deleteAProfessuinal);
 
 router.post(
   "/signup",
-  upload.single("image"),
+  [upload.single("image"), auth, admin],
   Professional.createProfessionalAccount
 );
 

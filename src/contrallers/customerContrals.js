@@ -119,7 +119,6 @@ const CustomerContrals = {
         .send({ status: 400, message: "Invalid Email Please check it" });
     }
     const { id } = findCustomer[0];
-    console.log(req.user);
 
     const { id: userId } = req.user;
 
@@ -127,7 +126,7 @@ const CustomerContrals = {
       return res.status(400).send({
         status: 400,
         message:
-          "Sorry you can not update a password for an accound that is not users",
+          "Sorry you can not update a password for an account that is not yours",
       });
     }
 
@@ -138,6 +137,31 @@ const CustomerContrals = {
     return res
       .status(200)
       .send({ status: 200, message: "Password update Successfully" });
+  },
+  async updateCustomerImage(req, res) {
+    const { id } = req.user;
+
+    const image = req.file;
+
+    let imageUrl;
+    if (!image) {
+      imageUrl = "";
+    }
+
+    imageUrl = image.path;
+
+    const findCustomer = await Customers.findCustomersUsingId(id);
+    if (!findCustomer.length) {
+      return res
+        .status(400)
+        .send({ status: 400, message: "Customer not found" });
+    }
+
+    await Customers.updateImageUrl(id, imageUrl);
+
+    return res
+      .status(200)
+      .send({ status: 200, message: "Image updated successfully" });
   },
 };
 

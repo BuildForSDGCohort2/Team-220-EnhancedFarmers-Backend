@@ -10,7 +10,7 @@ router.get("/", Projects.fetchAllProjects);
 
 router.get("/:id", Projects.getSpecificProject);
 
-router.get("/:id/projects", Projects.getProjectsSupervisedByTheSameProfessional);
+router.get("/:id/professionals", Projects.getProjectsSupervisedByTheSameProfessional);
 
 router.delete("/:id", Projects.deleteSpecificProject);
 

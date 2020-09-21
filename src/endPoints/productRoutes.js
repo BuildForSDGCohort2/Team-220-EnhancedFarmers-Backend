@@ -5,7 +5,7 @@ import upload from "../images";
 
 const router = Router();
 
-router.get("/", Products.getProductsWithSpecificCategory);
+router.get("/category", Products.getProductsWithSpecificCategory);
 
 router.get("/", Products.fetchAllProducts);
 

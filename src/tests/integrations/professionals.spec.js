@@ -1,19 +1,19 @@
 import req from "supertest";
-import "babel-polyfill";
 import sql from "../../database/tables";
-// import genToken from "../../helpers/genrateToken";
+
+import generateToken from "../../helpers/genrateToken";
+import "babel-polyfill";
 
 let server;
 describe("Testing Professional End Points", () => {
   beforeEach(async () => {
+    jest.setTimeout(15000);
     await sql.createTableProfessional();
-
-    await sql.createAdmin();
 
     server = require("../../app");
   });
 
-  const image = "../../uploads/pic.jpg";
+  const image = `${__dirname}/../../../uploads/pic.jpg`;
 
   afterEach(async () => {
     await sql.deleteTableProfessional();
@@ -23,72 +23,92 @@ describe("Testing Professional End Points", () => {
 
   describe("POST /", () => {
     let res;
-    // let token;
-    // const pro1 = {
-    //   email: "mugabamuha@gmail.com",
-    //   fname: "Rashid",
-    //   lname: "Mugaba",
-    //   contact: "0676976",
-    //   residence: "Kampala",
-    //   professional: "admin",
-    //   password: "ammedi",
-    //   is_admin: true,
-    //   imageUrl: "/uploads/mara.jpg",
-    // };
+    let token;
+
     const pro2 = {
       email: "mugaba@gmail.com",
       fname: "Rashid",
       lname: "Mugaba",
       contact: "0676976",
       residence: "Kampala",
-      professional: "admin",
+      profession: "admin",
       password: "ammedi",
     };
+    beforeEach(async () => {
+      token = await generateToken(1, "mugabamuha@gmail.com", 1);
+      await sql.createAdmin();
+    });
 
-    const data = new FormData();
-
-    data.append("image", image);
-
-    for (const i in pro2) {
-      data.append(i, pro2[i]);
-    }
-
-    const exec = async () => {
-      const res1 = await req(server)
-        .post("/professionals/login")
-        .send({ email: "mugabamuha@gamil.com", passowrd: "ammedi" });
-      res = await req(server)
+    const exec = async () =>
+      await req(server)
         .post("/professionals/signup")
-        .set("x-access-token", res1.body.token)
-        .send(data);
-      return res;
-    };
+        .set("x-access-token", token)
+        .field("email", pro2.email)
+        .field("fname", pro2.fname)
+        .field("lname", pro2.lname)
+        .field("contact", pro2.contact)
+        .field("residence", pro2.residence)
+        .field("profession", pro2.profession)
+        .field("password", pro2.password)
+        .attach("image", image, { contentType: "application/octet-stream" });
+
+    const exec1 = async () =>
+      await req(server)
+        .post("/professionals/signup")
+        .set("x-access-token", token)
+        .send(pro2);
+
+    const exec2 = async () =>
+      await req(server)
+        .post("/professionals/signup")
+        .set("x-access-token", token)
+        .field("email", "")
+        .field("fname", pro2.fname)
+        .field("lname", pro2.lname)
+        .field("contact", pro2.contact)
+        .field("residence", pro2.residence)
+        .field("profession", pro2.profession)
+        .field("password", pro2.password)
+        .attach("image", image, { contentType: "application/octet-stream" });
+
+    const exec3 = async () =>
+      await req(server)
+        .post("/professionals/signup")
+        .set("x-access-token", token)
+        .field("email", "mugabamuha@gmail.com")
+        .field("fname", pro2.fname)
+        .field("lname", pro2.lname)
+        .field("contact", pro2.contact)
+        .field("residence", pro2.residence)
+        .field("profession", pro2.profession)
+        .field("password", pro2.password)
+        .attach("image", image, { contentType: "application/octet-stream" });
+
     it("should return 201 if a customer is success fully registered", async () => {
       res = await exec();
 
-      //   console.log(res.body);
       expect(res.status).toBe(201);
       expect(res.body).toHaveProperty("token");
       expect(res.body).toHaveProperty("data");
       expect(res.body).toHaveProperty("status");
     });
-    // it("should return 409 if customer email already exists", async () => {
-    //   name = "MUGABA";
-    //   email = "programmingwithrashid@gmail.com";
-    //   password = "Rashid123";
 
-    //   res = await exec();
+    it("should return 400 if image is not uploaded", async () => {
+      res = await exec1();
 
-    //   expect(res.status).toBe(409);
-    // });
-    // it("should return 400 if customer name or email for password is not given", async () => {
-    //   name = "";
-    //   email = "programmingwithrashid2@gmail.com";
-    //   password = "Rashid123";
+      expect(res.status).toBe(400);
+    });
 
-    //   res = await exec();
+    it("should return 400 if any field is not given", async () => {
+      res = await exec2();
 
-    //   expect(res.status).toBe(400);
-    // });
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 400 professional already exists", async () => {
+      res = await exec3();
+
+      expect(res.status).toBe(400);
+    });
   });
 });
