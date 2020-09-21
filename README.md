@@ -36,14 +36,14 @@ clone the repository
 ## linux users
 
 1.  set up the development environment
-    1.export NODE_ENV=development
+    1. export NODE_ENV=**development**
 2.  set up the database configurations
-    1.export dbname=**database_name**
-    2.export password=**database_password**
-    3.export user=**database_username**
-    4.export host=**localhost**
+    1. export dbname=**database_name**
+    2. export password=**database_password**
+    3. export user=**database_username**
+    4. export host=**localhost**
 3.  set up security configurations for config module
-    5.export privatekey=**your_private_key**
+    1. export privatekey=**your_private_key**
 
 ---
 
@@ -62,34 +62,34 @@ Now Run the application with
 | **POST**   | /professionals/login        | signin a professional               |
 | **GET**    | /professionals/:id          | get a particular professional       |
 | **DELETE** | /professionals/:id          | delete a particular professional    |
-| **Now **   | **For **                    | **Projects**                        |
+| **Now **   | **For**                     | **Projects**                        |
 | **GET**    | /projects                   | get all projects                    |
 | **POST**   | /projects/create            | create a projects                   |
 | **GET**    | /projects/:id/professionals | projects watched by a professioanal |
 | **GET**    | /projects/:id/investors     | projects for an investoer           |
 | **GET**    | /projects/:id               | get a particular projects           |
 | **DELETE** | /projects/:id               | delete a particular project         |
-| **Now**    | **For **                    | **Products**                        |
+| **Now**    | **For**                     | **Products**                        |
 | **GET**    | /products                   | get all products                    |
 | **POST**   | /products                   | create a products for sell          |
 | **GET**    | /products/category          | all products with specific category |
 | **GET**    | /products/:id               | get a particular product            |
 | **DELETE** | /products/:id               | delete a particular product         |
-| **Now **   | **For**                     | **investors**                       |
+| **Now**    | **For**                     | **investors**                       |
 | **GET**    | /investors                  | get all investors                   |
 | **POST**   | /investors/rigister         | register investor                   |
 | **POST**   | /investors/login            | login investor                      |
 | **PATCH**  | /investors/:id/contact      | investor change contact             |
 | **GET**    | /investors/:id              | get a particular investor           |
 | **DELETE** | /investors/:id              | delete a particular investor        |
-| **Now**    | **For **                    | **Farmers**                         |
+| **Now**    | **For**                     | **Farmers**                         |
 | **GET**    | /farmers                    | get all farmers                     |
 | **POST**   | /farmers/signup             | register farmer                     |
 | **POST**   | /farmers/login              | login farmer                        |
 | **PATCH**  | /farmers/:id/approve        | approve farmer                      |
 | **GET**    | /farmers/:id                | get a particular farmer             |
 | **DELETE** | /farmers/:id                | delete a particular farmer          |
-| **Now **   | **For **                    | **customers**                       |
+| **Now**    | **For**                     | **customers**                       |
 | **GET**    | /customers                  | get all customers                   |
 | **POST**   | /customers/signup           | register customer                   |
 | **POST**   | /customers/login            | login customer                      |
