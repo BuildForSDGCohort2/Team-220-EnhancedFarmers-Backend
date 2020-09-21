@@ -27,7 +27,7 @@ const products = {
         price FLOAT NOT NULL,
         imageUrl VARCHAR(255) NOT NULL
     );`,
-  drop: "DROT TABLE IF EXISTS products CASCADE;",
+  drop: "DROP TABLE IF EXISTS products CASCADE;",
 };
 
 const professionsals = {
@@ -53,7 +53,7 @@ const professionsals = {
         "057688967",
         "Kampala",
         "admin",
-       "$2b$20$IAJR.2MbWtkU2jU608gdY.l05/uTMAvrzyvT91Uzz9lTTWdryVHne",
+       "$2b$20$bzOKVLfgxCfgjLPdV/6d5.wdWtkMOvqs0lMDcs51aowQQ6KV2Cr/C",
         1,
         "/uploads/image"
       );`,

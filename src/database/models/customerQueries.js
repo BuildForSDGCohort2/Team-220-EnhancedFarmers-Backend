@@ -46,6 +46,19 @@ const CustomerModel = {
     });
   },
 
+  updateImageUrl(id, imageUrl) {
+    return new Promise((resolve, reject) => {
+      const queryText = `UPDATE customers SET password = "${imageUrl}" WHERE id =?`;
+
+      db.query(queryText, [id], (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(rows);
+      });
+    });
+  },
+
   findCustomersUsingId(id) {
     return new Promise((resolve, reject) => {
       const queryText = " SELECT * FROM customers where id = ?";
@@ -64,26 +77,6 @@ const CustomerModel = {
       const queryText = "DELETE FROM customers WHERE id = ?";
 
       db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
-        }
-        return resolve(rows);
-      });
-    });
-  },
-
-  fetchAllCustomers() {
-    return new Promise((resolve, reject) => {
-      const text = `SELECT 
-      id,
-      email,
-      CONCAT(fname,' ',lname) AS name,
-      contact,
-      location,
-      IF(is_accepted=1,"YES","NO") AS isAccepted 
-      FROM farmers 
-      ORDER BY registered_at DESC;`;
-      db.query(text, (err, rows) => {
         if (err) {
           return reject(err);
         }

@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import config from "config";
 import generateToken from "../../helpers/genrateToken";
 import generateTokenFarmers from "../../helpers/generateTokenFarmers";
 import generateHash from "../../helpers/generateHash";
@@ -14,7 +15,7 @@ describe("Test Tokens", () => {
     };
 
     const token = generateToken(obj.id, obj.email, obj.isAdmin);
-    const decoded = jwt.verify(token, "secretTempKey");
+    const decoded = jwt.verify(token, config.get("privatekey"));
     expect(decoded).toMatchObject(obj);
   });
 
@@ -26,7 +27,7 @@ describe("Test Tokens", () => {
     };
 
     const token = generateTokenFarmers(obj.id, obj.email, obj.isAccepted);
-    const decoded = jwt.verify(token, "secretTempKey");
+    const decoded = jwt.verify(token, config.get("privatekey"));
     expect(decoded).toMatchObject(obj);
   });
 

@@ -43,6 +43,7 @@ const ProductContraller = {
     const checkProjectExists = await Project.findProjectUsingId(
       product.project_id
     );
+    
     if (!checkProjectExists.length) {
       return res
         .status(404)

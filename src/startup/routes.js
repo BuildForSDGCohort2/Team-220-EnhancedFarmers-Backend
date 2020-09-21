@@ -18,7 +18,9 @@ module.exports = (app) => {
   if (process.env.NODE_ENV === "development") {
     app.use(morgan("tiny"));
   }
+
   app.get("/", (req, res) => res.send("Hello World!"));
+
   app.use("/products", Products);
   app.use("/professionals", Proffessional);
   app.use("/farmers", Farmers);
