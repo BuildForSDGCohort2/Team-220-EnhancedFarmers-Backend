@@ -7,6 +7,15 @@ import generateHash from "../helpers/generateHash";
 import generateToken from "../helpers/generateTokenCustomers";
 
 const CustomerContrals = {
+  async getAllCustomers(req, res) {
+    const getAll = await Customers.fetchAllCustomers();
+
+    if (!getAll.length) {
+      return res.status(400).send({ status: 400, message: "No customers yet" });
+    }
+
+    return res.status(200).send({ status: 200, data: getAll });
+  },
   async registerNewCustomer(req, res) {
     const customer = _.pick(req.body, ["email", "username", "password"]);
 
@@ -162,6 +171,37 @@ const CustomerContrals = {
     return res
       .status(200)
       .send({ status: 200, message: "Image updated successfully" });
+  },
+
+  async getSingleCustomer(req, res) {
+    const customerId = req.params.id;
+
+    const getCustomer = await Customers.findCustomersUsingId(customerId);
+
+    if (!getCustomer.length) {
+      return res
+        .status(404)
+        .send({ status: 404, message: "Customer of that id not available" });
+    }
+    return res.status(200).send({ status: 200, data: getCustomer[0] });
+  },
+
+  async deleteAcustomer(req, res) {
+    const customerId = req.params.id;
+
+    const getCustomer = await Customers.findCustomersUsingId(customerId);
+
+    if (!getCustomer.length) {
+      return res
+        .status(404)
+        .send({ status: 404, message: "Customer of that id not available" });
+    }
+
+    await Customers.deleteSpecificCustomer(customerId);
+
+    return res
+      .status(200)
+      .send({ status: 200, message: "Customer deleted successfully" });
   },
 };
 

@@ -61,7 +61,12 @@ const CustomerModel = {
 
   findCustomersUsingId(id) {
     return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM customers where id = ?";
+      const queryText = `SELECT 
+      id,
+      email,
+      username,
+      imageUrl
+       FROM customers where id = ?`;
 
       db.query(queryText, [id], (err, rows) => {
         if (err) {
@@ -77,6 +82,24 @@ const CustomerModel = {
       const queryText = "DELETE FROM customers WHERE id = ?";
 
       db.query(queryText, [id], (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(rows);
+      });
+    });
+  },
+
+  fetchAllCustomers() {
+    return new Promise((resolve, reject) => {
+      const queryText = `SELECT 
+      id,
+      username,
+      email,
+      imageUrl
+       FROM customers;`;
+
+      db.query(queryText, (err, rows) => {
         if (err) {
           return reject(err);
         }

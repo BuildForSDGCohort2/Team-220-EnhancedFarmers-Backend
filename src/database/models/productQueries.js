@@ -1,8 +1,9 @@
 import db from "../connection";
 
 const ProductModel = {
-  createProductForSell: (rowData, imageUrl) => new Promise((resolve, reject) => {
-    const queryText = `INSERT INTO products 
+  createProductForSell: (rowData, imageUrl) =>
+    new Promise((resolve, reject) => {
+      const queryText = `INSERT INTO products 
     ( farmer_id,project_id,name,category,quantity,price,imageUrl)
       values(
           "${rowData.farmer_id}",
@@ -15,19 +16,30 @@ const ProductModel = {
       );
       SELECT * FROM products WHERE id=(SELECT LAST_INSERT_ID())`;
 
-    db.query(queryText, (err, rows) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(rows[1][0]);
-    });
-  }),
+      db.query(queryText, (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(rows[1][0]);
+      });
+    }),
 
   getAllAvailableProducts() {
     return new Promise((resolve, reject) => {
-      const text = "SELECT * FROM products;";
+      const text = `SELECT 
+      id,
+      farmer_id,
+      project_id,
+      name,
+      category,
+      quantity,
+      price,
+      imageUrl
+       FROM products;`;
       db.query(text, (err, rows) => {
-        if (err) { return reject(err); }
+        if (err) {
+          return reject(err);
+        }
         return resolve(rows);
       });
     });
@@ -70,7 +82,6 @@ const ProductModel = {
       });
     });
   },
-
 };
 
 export default ProductModel;
