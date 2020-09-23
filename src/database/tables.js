@@ -59,6 +59,7 @@ const professionsals = {
       );`,
   drop: "DROP TABLE IF EXISTS professionals CASCADE;",
 };
+
 const investor = {
   create: `CREATE TABLE IF NOT EXISTS investors (
           id int primary key auto_increment,
@@ -100,6 +101,37 @@ const customers = {
   );`,
   delete: "DROP TABLE IF EXISTS customers CASCADE",
 };
+
+const orders = {
+  create: `CREATE TABLE IF NOT EXISTS orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT REFERENCES products (id) ON DELETE CASCADE,
+    customer_id INT REFERENCES customers (id) ON DELETE CASCADE,
+    price FLOAT NOT NULL,
+    created_on TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    offered_price FLOAT NOT NULL,
+    status ENUM('pending','rejected','approved') NOT NULL DEFAULT 'pending'
+  )`,
+  delete: "DROP TABLE IF EXISTS orders CASCADE",
+};
+
+function createTableOrders() {
+  return new Promise((resolve, reject) => {
+    db.query(orders.create, (err) => {
+      if (!err) return resolve({ message: "farmers table created" });
+      return reject(err);
+    });
+  });
+}
+
+function deleteTableOrders() {
+  return new Promise((resolve, reject) => {
+    db.query(orders.delete, (err) => {
+      if (!err) return resolve({ message: "farmers table deleted" });
+      return reject(err);
+    });
+  });
+}
 
 function createTableFarmers() {
   return new Promise((resolve, reject) => {
@@ -231,5 +263,7 @@ export default {
   deleteTableProjects,
   createTableCustomers,
   deleteTableCustomers,
+  createTableOrders,
+  deleteTableOrders,
   createAdmin,
 };

@@ -13,7 +13,9 @@ const ProductContraller = {
       return res.status(400).send({ message: "No product yet" });
     }
 
-    return res.status(200).send({ status: 200, data: getAll });
+    const data = [...getAll];
+
+    return res.status(200).send({ status: 200, data });
   },
   async createProductReadyTosell(req, res) {
     const product = _.pick(req.body, [
@@ -31,7 +33,8 @@ const ProductContraller = {
         .status(400)
         .send({ status: 400, message: "Please select an image" });
     }
-    const imageUrl = image.path;
+
+    const imageUrl = image.filename;
 
     const { error } = await validate.validateProductInput(product);
     if (error) {
@@ -43,7 +46,7 @@ const ProductContraller = {
     const checkProjectExists = await Project.findProjectUsingId(
       product.project_id
     );
-    
+
     if (!checkProjectExists.length) {
       return res
         .status(404)
