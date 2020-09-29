@@ -33,7 +33,7 @@ describe("Test Tokens", () => {
 
   it("It should return a password hash", async () => {
     const hash = "hkdfhkhfkshbv734nxu47cbh884";
-    const result = await generateHash("hello", "email@email.com");
+    const result = await generateHash("hello");
     expect(result).not.toBe(hash);
   });
 });

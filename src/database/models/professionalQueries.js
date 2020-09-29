@@ -1,81 +1,91 @@
 import db from "../connection";
 
 const ProfessionalModel = {
-  registerProfessional(rowData, imageUrl) {
-    return new Promise((resolve, reject) => {
-      const queryText = `INSERT INTO professionals ( email,fname,lname,contact,residence,profession,password,imageUrl)
+  registerProfessional(rowData, imageurl) {
+    return new Promise(async (resolve, reject) => {
+      const queryText = `INSERT INTO professionals ( email,fname,lname,contact,residence,profession,password,imageurl)
       values(
-          "${rowData.email}",
-          "${rowData.fname}",
-          "${rowData.lname}",
-          "${rowData.contact}",
-          "${rowData.residence}",
-          "${rowData.profession}",
-          "${rowData.password}",
-          "${imageUrl}"
-      );
-      SELECT * FROM professionals WHERE id=(SELECT LAST_INSERT_ID())`;
+          '${rowData.email}',
+          '${rowData.fname}',
+          '${rowData.lname}',
+          '${rowData.contact}',
+          '${rowData.residence}',
+          '${rowData.profession}',
+          '${rowData.password}',
+          '${imageurl}'
+      )
+      RETURNING *;`;
 
-      db.query(queryText, (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows[0]);
         }
-        return resolve(rows[1][0]);
+        return reject(err);
       });
     });
   },
   findSpecificProfession(email) {
-    return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM professionals where email = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = "SELECT * FROM professionals where email = $1";
 
-      db.query(queryText, [email], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [email], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows[0]);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
   findProUsingId(id) {
-    return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM professionals where id = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = " SELECT * FROM professionals where id = $1";
 
-      db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   removeAProfessionalFromDb(id) {
-    return new Promise((resolve, reject) => {
-      const queryText = "DELETE FROM professionals WHERE id = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = "DELETE FROM professionals WHERE id = $1";
 
-      db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
   fetchAllProfessionals() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const text = `SELECT 
       id,
       email, 
       CONCAT(fname, ' ', lname) as name,
-      contact AS Contact,
-      residence AS Residence,
-      profession AS Profession,
+      contact AS "Contact",
+      residence AS "Residence",
+      profession AS "Profession",
       imageUrl,
-      IF(is_admin = 1, 'true', 'false') AS isAdmin 
+      CASE WHEN is_admin = true THEN 'YES'
+      else 'NO'
+      END AS "isAdmin" 
       FROM professionals;`;
-      db.query(text, (err, rows) => {
-        if (err) { return reject(err); }
-        return resolve(rows);
+
+      await db.query(text, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
+        }
+        return reject(err);
       });
     });
   },

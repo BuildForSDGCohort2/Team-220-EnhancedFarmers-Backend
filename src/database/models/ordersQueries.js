@@ -2,7 +2,7 @@ import db from "../connection";
 
 const OrdersModel = {
   makeAnOrder(rowData, id) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const queryText = `INSERT INTO farmers (product_id,customer_id,price,offered_price)
       values(
           "${rowData.product_id}",
@@ -12,7 +12,7 @@ const OrdersModel = {
       );
       SELECT * FROM farmers WHERE id=(SELECT LAST_INSERT_ID())`;
 
-      db.query(queryText, (err, rows) => {
+      await db.query(queryText, (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -20,12 +20,14 @@ const OrdersModel = {
       });
     });
   },
+
   findOrderUsingId(id) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const queryText = `SELECT 
       o.id AS id,
       c.username AS name,
-      c.email AS email
+      c.email AS email,
+      c.conatct AS contact,
       p.name AS product,
       p.price AS price,
       o.offered_price AS offered_price
@@ -37,7 +39,7 @@ const OrdersModel = {
       WHERE o.id = ?
       ORDER BY o.created_on DESC;`;
 
-      db.query(queryText, [id], (err, rows) => {
+      await db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -47,10 +49,10 @@ const OrdersModel = {
   },
 
   ChangeStatus(id, status) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const queryText = `UPDATE farmers SET is_accepted = "${status}" WHERE id = ?`;
 
-      db.query(queryText, [id], (err, rows) => {
+      await db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -60,10 +62,10 @@ const OrdersModel = {
   },
 
   ChangePrice(id, price) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const queryText = `UPDATE farmers SET offered_price = "${price}" WHERE id = ?`;
 
-      db.query(queryText, [id], (err, rows) => {
+      await db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -73,10 +75,10 @@ const OrdersModel = {
   },
 
   getOrder(id) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const queryText = "DSELECT * orders WHERE id = ?";
 
-      db.query(queryText, [id], (err, rows) => {
+      await db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -85,10 +87,10 @@ const OrdersModel = {
     });
   },
   deleteSpecificOrder(id) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const queryText = "DELETE FROM orders WHERE id = ?";
 
-      db.query(queryText, [id], (err, rows) => {
+      await db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -97,11 +99,12 @@ const OrdersModel = {
     });
   },
   fetchAllOders() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const text = `SELECT 
       o.id AS id,
       c.username AS name,
-      c.email AS email
+      c.email AS email,
+      c.conatct AS contact,
       p.name AS product,
       p.price AS price,
       o.offered_price AS offered_price
@@ -111,7 +114,8 @@ const OrdersModel = {
         INNER JOIN products p
           ON O.product_id = p.id
       ORDER BY o.created_on DESC;`;
-      db.query(text, (err, rows) => {
+
+      await db.query(text, (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -121,11 +125,12 @@ const OrdersModel = {
   },
 
   fetchAllPedingOrders() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const text = `SELECT 
       o.id AS id,
       c.username AS name,
-      c.email AS email
+      c.email AS email,
+      c.conatct AS contact,
       p.name AS product,
       p.price AS price,
       o.offered_price AS offered_price
@@ -136,7 +141,7 @@ const OrdersModel = {
           ON O.product_id = p.id
       WHERE o.status='pending'
       ORDER BY o.created_on DESC;`;
-      db.query(text, (err, rows) => {
+      await db.query(text, (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -146,11 +151,12 @@ const OrdersModel = {
   },
 
   fetchAllOrdersByCustomer(id) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const text = `SELECT 
       o.id AS id,
       c.username AS name,
-      c.email AS email
+      c.email AS email,
+      c.conatct AS contact,
       p.name AS product,
       p.price AS price,
       o.offered_price AS offered_price
@@ -161,7 +167,8 @@ const OrdersModel = {
           ON O.product_id = p.id
       WHERE o.customer_id=?
       ORDER BY o.created_on DESC;`;
-      db.query(text, [id], (err, rows) => {
+
+      await db.query(text, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }

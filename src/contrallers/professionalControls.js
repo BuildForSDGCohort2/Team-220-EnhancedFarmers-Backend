@@ -2,6 +2,7 @@ import _ from "lodash";
 import bcrypt from "bcrypt";
 
 import Professionals from "../database/models/professionalQueries";
+import Project from "../database/models/projectQueries";
 import validate from "../validations/validateProfessionals";
 import generateHash from "../helpers/generateHash";
 import generateToken from "../helpers/genrateToken";
@@ -35,7 +36,7 @@ const Professional = {
         .send({ status: 400, message: "Please select an image" });
     }
 
-    const imageUrl = image.path;
+    const imageUrl = image.filename;
 
     const { error } = await validate.validateSignup(professional);
     if (error) {
@@ -49,7 +50,7 @@ const Professional = {
       professional.email
     );
 
-    if (findProfession.length) {
+    if (findProfession) {
       return res
         .status(400)
         .send({ status: 400, message: "Professional already a  member" });
@@ -64,26 +65,19 @@ const Professional = {
       professional,
       imageUrl
     );
-    const { id, email, is_admin: isAdmin } = regisiterProfessional;
 
-    const token = await generateToken(id, email, isAdmin);
-    return res
-      .status(201)
-      .header("x-access-token", token)
-      .header("access-control-expose-headers", "x-access-token")
-      .send({
-        status: 201,
-        token,
-        data: _.pick(regisiterProfessional, [
-          "id",
-          "email",
-          "fname",
-          "lname",
-          "contact",
-          "residence",
-          "profession",
-        ]),
-      });
+    return res.status(201).send({
+      status: 201,
+      data: _.pick(regisiterProfessional, [
+        "id",
+        "email",
+        "fname",
+        "lname",
+        "contact",
+        "residence",
+        "profession",
+      ]),
+    });
   },
   async signInAprofessional(req, res) {
     const loginInfo = _.pick(req.body, ["email", "password"]);
@@ -98,13 +92,14 @@ const Professional = {
     const findProfessional = await Professionals.findSpecificProfession(
       loginInfo.email
     );
-    if (!findProfessional.length) {
+
+    if (!findProfessional) {
       return res
         .status(400)
         .send({ status: 400, message: "wrogle email or password" });
     }
 
-    const { id, email, is_admin: isAdmin, password } = findProfessional[0];
+    const { id, email, is_admin: isAdmin, password } = findProfessional;
 
     const isValid = await bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
@@ -143,6 +138,7 @@ const Professional = {
     }
 
     const getProfessional = await Professionals.findProUsingId(proId.id);
+
     if (!getProfessional.length) {
       return res
         .status(404)
@@ -158,7 +154,7 @@ const Professional = {
         "contact",
         "residence",
         "profession",
-        "imageUrl",
+        "imageurl",
       ]),
     });
   },
@@ -180,7 +176,15 @@ const Professional = {
         .send({ status: 404, message: "Professional of that id is not found" });
     }
 
-    // we will validate whether the current user is the one is the owner of this account
+    const getProjectsByProfessional = await Project.getProjectBySameProffesional();
+    console.log(getProjectsByProfessional);
+
+    if (getProjectsByProfessional.length) {
+      return res.status(400).send({
+        status: 400,
+        message: "you can delete a professtonal with projects running",
+      });
+    }
 
     await Professionals.removeAProfessionalFromDb(proId.id);
 

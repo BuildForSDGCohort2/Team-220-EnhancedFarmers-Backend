@@ -1,26 +1,16 @@
-import mysql from "mysql";
 import config from "config";
-
+import { Pool } from "pg";
 import logger from "../helpers/logger";
 
-const pool = mysql.createPool({
-  connectionLimit: 100,
-  host: config.get("host"),
-  user: config.get("user"),
-  password: config.get("password"),
-  database: config.get("dbname"),
-  port: config.get("port"),
-  multipleStatements: true,
+const pool = new Pool({
+  connectionString: config.get("db"),
 });
 
-module.exports.connect = pool.getConnection((err, connection) => {
+pool.connect((err, res) => {
   if (err) {
-    return logger.info("we could not connect to the database", err);
-  }
-
-  if (connection) {
-    return logger.info("We successfully connected to the database");
+    logger.info("Please check your connection");
+  } else if (res) {
+    logger.info(`Connected to ${process.env.NODE_ENV} database `);
   }
 });
-
-module.exports = pool;
+export default pool;

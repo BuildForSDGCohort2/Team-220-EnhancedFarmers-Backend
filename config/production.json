@@ -1,8 +1,4 @@
 {
-  "dbname": "",
-  "password": "",
-  "user": "",
-  "host": "",
-  "privatekey": "",
-  "port": ""
+  "db": "",
+  "privatekey": ""
 }

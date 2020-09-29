@@ -7,11 +7,11 @@ import upload from "../images";
 
 const router = Router();
 
-router.get("/", Professional.getAll);
+router.get("/", [auth, admin], Professional.getAll);
 
-router.get("/:id", Professional.getSpecificProfessionalUsingId);
+router.get("/:id", auth, Professional.getSpecificProfessionalUsingId);
 
-router.delete("/:id", Professional.deleteAProfessuinal);
+router.delete("/:id", [auth, admin], Professional.deleteAProfessuinal);
 
 router.post(
   "/signup",

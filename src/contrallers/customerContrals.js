@@ -17,7 +17,12 @@ const CustomerContrals = {
     return res.status(200).send({ status: 200, data: getAll });
   },
   async registerNewCustomer(req, res) {
-    const customer = _.pick(req.body, ["email", "username", "password"]);
+    const customer = _.pick(req.body, [
+      "email",
+      "username",
+      "contact",
+      "password",
+    ]);
 
     // capturing the image loaded by the farmer
     const image = await req.file;
@@ -84,7 +89,7 @@ const CustomerContrals = {
 
     const { id, email, username, password } = findCustomer[0];
 
-    const isValid = await bcrypt.compare(loginInfo.password, password);
+    const isValid = bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
       return res
         .status(400)
@@ -117,31 +122,23 @@ const CustomerContrals = {
     if (info.password !== info.confirmPassword) {
       return res.status(400).send({
         status: 400,
-        message: "password and confirm password mist be the same",
+        message: "password and confirm password must be the same",
       });
     }
 
     const findCustomer = await Customers.findSpecificCustomer(info.email);
+
     if (!findCustomer.length) {
-      return res
-        .status(400)
-        .send({ status: 400, message: "Invalid Email Please check it" });
+      return res.status(400).send({
+        status: 400,
+        message: "Check Email! Invalid Email! or Signup",
+      });
     }
     const { id } = findCustomer[0];
 
-    const { id: userId } = req.user;
+    const password = generateHash(info.password, info.email);
 
-    if (id !== userId) {
-      return res.status(400).send({
-        status: 400,
-        message:
-          "Sorry you can not update a password for an account that is not yours",
-      });
-    }
-
-    const password = await generateHash(info.password, info.email);
-
-    await Customers.updatePassword(userId, password);
+    await Customers.updatePassword(id, password);
 
     return res
       .status(200)
