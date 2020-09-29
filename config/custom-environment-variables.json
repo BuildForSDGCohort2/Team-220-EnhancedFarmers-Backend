@@ -1,4 +1,4 @@
 {
   "privatekey": "privatekey",
-  "dbUrl": "dbname"
+  "db": "db"
 }
