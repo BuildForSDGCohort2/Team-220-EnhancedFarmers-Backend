@@ -1,3 +1,4 @@
 {
-  "privateKey": "my_secret_key"
+  "privateKey": "my_secret_key",
+  "db": "postgresql://rashid:amm@123@localhost:5432/team220"
 }

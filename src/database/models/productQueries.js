@@ -2,30 +2,30 @@ import db from "../connection";
 
 const ProductModel = {
   createProductForSell: (rowData, imageUrl) =>
-    new Promise((resolve, reject) => {
+    new Promise(async (resolve, reject) => {
       const queryText = `INSERT INTO products 
     ( farmer_id,project_id,name,category,quantity,price,imageUrl)
       values(
-          "${rowData.farmer_id}",
-          "${rowData.project_id}",
-          "${rowData.name}",
-          "${rowData.category}",
-          "${rowData.quantity}",
-          "${rowData.price}",
-          "${imageUrl}"
-      );
-      SELECT * FROM products WHERE id=(SELECT LAST_INSERT_ID())`;
+          '${rowData.farmer_id}',
+          '${rowData.project_id}',
+          '${rowData.name}',
+          '${rowData.category}',
+          '${rowData.quantity}',
+          '${rowData.price}',
+          '${imageUrl}'
+      ) RETURNING *;`;
 
-      db.query(queryText, (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows[0]);
         }
-        return resolve(rows[1][0]);
+        return reject(err);
       });
     }),
 
   getAllAvailableProducts() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const text = `SELECT 
       id,
       farmer_id,
@@ -36,49 +36,54 @@ const ProductModel = {
       price,
       imageUrl
        FROM products;`;
-      db.query(text, (err, rows) => {
-        if (err) {
-          return reject(err);
+
+      await db.query(text, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   getSingleProduct(id) {
-    return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM products where id = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = "SELECT * FROM products where id = $1";
 
-      db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   removeProduct(id) {
-    return new Promise((resolve, reject) => {
-      const queryText = "DELETE FROM products WHERE id = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = "DELETE FROM products WHERE id = $1";
 
-      db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
   getProductsAccordingToCategory(category) {
-    return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM products where category = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = " SELECT * FROM products where category = $1";
 
-      db.query(queryText, [category], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [category], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },

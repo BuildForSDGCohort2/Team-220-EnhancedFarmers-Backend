@@ -13,7 +13,6 @@ const ProjectContrals = {
     if (!getAll.length) {
       return res.status(400).send({ status: 400, message: "No projects yet" });
     }
-
     return res.status(200).send({ status: 200, data: getAll });
   },
   async registerProject(req, res) {
@@ -128,7 +127,7 @@ const ProjectContrals = {
         .send({ status: 404, message: "Project of that id is not fount" });
     }
 
-    return res.status(200).send({ status: 200, data: getProjects[0] });
+    return res.status(200).send({ status: 200, data: getProjects });
   },
 };
 

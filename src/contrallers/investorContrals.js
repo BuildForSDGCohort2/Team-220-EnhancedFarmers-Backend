@@ -94,7 +94,7 @@ const InvestorContrals = {
 
     const { id, email, is_admin: isAdmin, password } = findInvestor[0];
 
-    const isValid = await bcrypt.compare(loginInfo.password, password);
+    const isValid = bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
       return res
         .status(400)

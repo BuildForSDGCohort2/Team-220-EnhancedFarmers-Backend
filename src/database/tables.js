@@ -2,7 +2,7 @@ import db from "./connection";
 
 const farmers = {
   create: `CREATE TABLE IF NOT EXISTS farmers (
-          id int primary key auto_increment,
+          id SERIAL primary key,
           email VARCHAR(30) NOT NULL,
           fname VARCHAR(255) NOT NULL,
           lname VARCHAR(255) NOT NULL,
@@ -12,13 +12,13 @@ const farmers = {
           location VARCHAR(255) NOT NULL,
           password TEXT NOT NULL,
           imageUrl VARCHAR(255) NOT NULL
-      );`,
+      ) ;`,
   drop: "DROP TABLE IF EXISTS farmers  CASCADE;",
 };
 
 const products = {
   create: `CREATE TABLE IF NOT EXISTS products (
-        id INT PRIMARY KEY AUTO_INCREMENT,
+        id SERIAL PRIMARY KEY,
         farmer_id int REFERENCES farmers(id) ON DELETE CASCADE,
         project_id INT REFERENCES projects (id) ON DELETE CASCADE,
         name VARCHAR(255) NOT NULL,
@@ -32,7 +32,7 @@ const products = {
 
 const professionsals = {
   create: `CREATE TABLE IF NOT EXISTS professionals (
-          id int primary key auto_increment,
+          id SERIAL primary key,
           email VARCHAR(30)  UNIQUE NOT NULL,
           fname VARCHAR(255) NOT NULL,
           lname VARCHAR(255) NOT NULL,
@@ -44,25 +44,26 @@ const professionsals = {
           is_admin BOOLEAN DEFAULT false,
           imageUrl VARCHAR(255) NOT NULL
       );`,
-  insert: `INSERT INTO professionals (email,fname,lname,contact,residence,
+  insert: `
+      INSERT INTO professionals (email,fname,lname,contact,residence,
       profession,password,is_admin,imageUrl)
       VALUES(
-        "mugabamuha@gmail.com",
-        "Rashid",
-        "Mugaba",
-        "057688967",
-        "Kampala",
-        "admin",
-       "$2b$20$bzOKVLfgxCfgjLPdV/6d5.wdWtkMOvqs0lMDcs51aowQQ6KV2Cr/C",
-        1,
-        "/uploads/image"
+        'mugabamuha@gmail.com',
+        'Rashid',
+        'Mugaba',
+        '057688967',
+        'Kampala',
+        'admin',
+       '$2b$10$IGqTY7vNcOe5/Ky3rQ/V2Oje0Uc9iFm8ttlgodyW2KLC4PEXRhma6',
+        true,
+        '/uploads/image'
       );`,
   drop: "DROP TABLE IF EXISTS professionals CASCADE;",
 };
 
 const investor = {
   create: `CREATE TABLE IF NOT EXISTS investors (
-          id int primary key auto_increment,
+          id SERIAL primary key,
           email VARCHAR(30) NOT NULL,
           company_name VARCHAR(255) NOT NULL,
           contact VARCHAR(30) NOT NULL,
@@ -74,8 +75,8 @@ const investor = {
 
 const projects = {
   create: `CREATE TABLE IF NOT EXISTS projects (
-    id int primary key auto_increment,
-    farmer_id INT REFERENCES farmers (id)  ON DELETE CASCADE,
+    id SERIAL primary key,
+    farmer_id INT REFERENCES farmers (id) ON DELETE CASCADE,
     profesional_id INT REFERENCES professionals (id) ON DELETE CASCADE,
     investor_id INT REFERENCES investors (id) ON DELETE CASCADE,
     product_category VARCHAR(100) NOT NULL,
@@ -86,15 +87,16 @@ const projects = {
     end_time DATE,
     description TEXT,
     is_progress BOOLEAN DEFAULT TRUE
-    )`,
+    );`,
   delete: "DROP TABLE IF EXISTS projects CASCADE",
 };
 
 const customers = {
   create: `CREATE TABLE IF NOT EXISTS customers (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) NOT NULL,
+    contact VARCHAR(255) NOT NULL,
     password TEXT NOT NULL,
     registered_on TIMESTAMP NOT NULL DEFAULT NOW(),
     imageUrl VARCHAR(255)
@@ -104,7 +106,7 @@ const customers = {
 
 const orders = {
   create: `CREATE TABLE IF NOT EXISTS orders (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id SERIAL PRIMARY KEY,
     product_id INT REFERENCES products (id) ON DELETE CASCADE,
     customer_id INT REFERENCES customers (id) ON DELETE CASCADE,
     price FLOAT NOT NULL,

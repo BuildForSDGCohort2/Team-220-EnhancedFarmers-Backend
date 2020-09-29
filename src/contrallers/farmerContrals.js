@@ -49,9 +49,10 @@ const FarmerContrals = {
         .send({ status: 400, message: "farmer already a  member" });
     }
 
-    farmer.password = await generateHash(farmer.password, farmer.email);
+    farmer.password = await generateHash(farmer.password);
     // this is where we push the data to the datebase
     const regisiterfarmer = await Farmer.registerFarmer(farmer, imageUrl);
+    console.log(regisiterfarmer);
 
     const { id, email, is_accepted: isAccepted } = regisiterfarmer;
 
@@ -92,7 +93,7 @@ const FarmerContrals = {
         .send({ status: 400, message: "wrogle email or password" });
     }
 
-    const { id, email, is_admin: isAdmin, password } = findFarmer[0];
+    const { id, email, is_accepted: isAccepted, password } = findFarmer[0];
 
     const isValid = await bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
@@ -101,7 +102,7 @@ const FarmerContrals = {
         .send({ status: 400, message: "wrogle email or password" });
     }
 
-    const token = await generateToken(id, email, isAdmin);
+    const token = await generateToken(id, email, isAccepted);
 
     return res
       .status(200)
@@ -152,8 +153,8 @@ const FarmerContrals = {
         .send({ status: 404, message: "farmer of that id is not found" });
     }
 
-    if (isAccepted.is_accepted === "true") isAccepted.is_accepted = 1;
-    else isAccepted.is_accepted = 0;
+    if (isAccepted.is_accepted === "true") isAccepted.is_accepted = true;
+    else isAccepted.is_accepted = false;
 
     await Farmer.approveFarmerToMember(farmerId, isAccepted.is_accepted);
 
@@ -173,12 +174,10 @@ const FarmerContrals = {
 
     const checkFarmerExists = await Farmer.findFarmerUsingId(farmerId);
     if (!checkFarmerExists.length) {
-      return res
-        .status(404)
-        .send({
-          status: 404,
-          message: "Sorry farmer with that id doesnot exist",
-        });
+      return res.status(404).send({
+        status: 404,
+        message: "Sorry farmer with that id doesnot exist",
+      });
     }
 
     await Farmer.deleteSpecificFarmer(farmerId);

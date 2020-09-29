@@ -18,7 +18,7 @@ router.post("/", upload.single("image"), Customer.registerNewCustomer);
 
 router.post("/login", Customer.loginCustomer);
 
-router.patch("/password", auth, Customer.changePassword);
+router.patch("/password", Customer.changePassword);
 
 router.patch("/image", auth, Customer.updateCustomerImage);
 

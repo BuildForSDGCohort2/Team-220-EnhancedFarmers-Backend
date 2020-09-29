@@ -5,6 +5,7 @@ const ValidateCustomer = {
     const schema = Joi.object().keys({
       email: Joi.string().email().required(),
       username: Joi.string().required(),
+      contact: Joi.string().required(),
       password: Joi.string().required(),
     });
     return schema.validate(rowData);

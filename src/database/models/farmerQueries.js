@@ -1,70 +1,75 @@
 import db from "../connection";
 
 const FarmerModel = {
-  registerFarmer(rowData, imageUrl) {
-    return new Promise((resolve, reject) => {
-      const queryText = `INSERT INTO farmers ( email,fname,lname,contact,location,password,imageUrl)
+  registerFarmer(rowData, imageurl) {
+    return new Promise(async (resolve, reject) => {
+      const queryText = `INSERT INTO farmers ( email,fname,lname,contact,location,password,imageurl)
       values(
-          "${rowData.email}",
-          "${rowData.fname}",
-          "${rowData.lname}",
-          "${rowData.contact}",
-          "${rowData.location}",
-          "${rowData.password}",
-          "${imageUrl}"
-      );
-      SELECT * FROM farmers WHERE id=(SELECT LAST_INSERT_ID())`;
+          '${rowData.email}',
+          '${rowData.fname}',
+          '${rowData.lname}',
+          '${rowData.contact}',
+          '${rowData.location}',
+          '${rowData.password}',
+          '${imageurl}'
+      )
+      RETURNING *;`;
 
-      db.query(queryText, (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows[0]);
         }
-        return resolve(rows[1][0]);
+        return reject(err);
       });
     });
   },
   findSpecificFarmer(email) {
-    return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM farmers where email = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = "SELECT * FROM farmers where email = $1";
 
-      db.query(queryText, [email], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [email], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
   findFarmerUsingId(id) {
-    return new Promise((resolve, reject) => {
-      const queryText = " SELECT * FROM farmers where id = ?";
+    return new Promise(async (resolve, reject) => {
+      const queryText = "SELECT * FROM farmers where id = $1";
 
-      db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   approveFarmerToMember(id, member) {
-    return new Promise((resolve, reject) => {
-      const queryText = `UPDATE farmers SET is_accepted = "${member}" WHERE id = ?`;
+    return new Promise(async (resolve, reject) => {
+      const queryText = `UPDATE farmers SET is_accepted = '${member}' WHERE id = $1`;
 
-      db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows[0]);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
-  deleteSpecificFarmer(id) {
-    return new Promise((resolve, reject) => {
-      const queryText = "DELETE FROM farmers WHERE id = ?";
 
-      db.query(queryText, [id], (err, rows) => {
+  deleteSpecificFarmer(id) {
+    return new Promise(async (resolve, reject) => {
+      const queryText = "DELETE FROM farmers WHERE id = $1";
+
+      await db.query(queryText, [id], (err, rows) => {
         if (err) {
           return reject(err);
         }
@@ -73,19 +78,25 @@ const FarmerModel = {
     });
   },
   fetchAllFarmers() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const text = `SELECT 
       id,
       email,
       CONCAT(fname,' ',lname) AS name,
       contact,
       location,
-      IF(is_accepted=1,"YES","NO") AS isAccepted 
+      CASE WHEN is_accepted=true THEN 'YES'
+      ELSE 'NO' 
+      END AS "isAccepted" 
       FROM farmers 
       ORDER BY registered_at DESC;`;
-      db.query(text, (err, rows) => {
-        if (err) { return reject(err); }
-        return resolve(rows);
+
+      await db.query(text, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
+        }
+        return reject(err);
       });
     });
   },
