@@ -7,9 +7,9 @@
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./src -s",
     "build": "npm run clean && npm run build-babel",
-    "start1": "npm run build && node ./build/app.js",
+    "start": "npm run build && node ./build/app.js",
     "dev2": "babel-node src/app.js",
-    "start": "nodemon src/app.js --exec babel-node",
+    "start1": "nodemon src/app.js --exec babel-node",
     "test": "jest --watchAll --verbose"
   },
   "engines": {

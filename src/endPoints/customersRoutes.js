@@ -20,6 +20,6 @@ router.post("/login", Customer.loginCustomer);
 
 router.patch("/password", Customer.changePassword);
 
-router.patch("/image", auth, Customer.updateCustomerImage);
+router.patch("/image",[upload.single("image"), auth], Customer.updateCustomerImage);
 
 export default router;

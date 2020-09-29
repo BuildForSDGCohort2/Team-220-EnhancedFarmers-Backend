@@ -49,9 +49,9 @@ const CustomerModel = {
     });
   },
 
-  updateImageUrl(id, imageUrl) {
+  updateImageUrl(id, imageurl) {
     return new Promise(async (resolve, reject) => {
-      const queryText = `UPDATE customers SET password = '${imageUrl}' WHERE id =$1`;
+      const queryText = `UPDATE customers SET imageurl = '${imageurl}' WHERE id =$1`;
 
       await db.query(queryText, [id], (err, res) => {
         if (res) {

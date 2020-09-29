@@ -89,7 +89,7 @@ const CustomerContrals = {
 
     const { id, email, username, password } = findCustomer[0];
 
-    const isValid = bcrypt.compare(loginInfo.password, password);
+    const isValid = await bcrypt.compare(loginInfo.password, password);
     if (!isValid) {
       return res
         .status(400)
@@ -134,27 +134,32 @@ const CustomerContrals = {
         message: "Check Email! Invalid Email! or Signup",
       });
     }
-    const { id } = findCustomer[0];
+    const { id,email,username } = findCustomer[0];
 
     const password = generateHash(info.password, info.email);
 
     await Customers.updatePassword(id, password);
 
+    const token = await generateToken(id, email, username);
+
     return res
       .status(200)
-      .send({ status: 200, message: "Password update Successfully" });
+      .header("x-access-token", token)
+      .header("access-control-expose-headers", "x-access-token")
+      .send({
+        status: 200,
+        token
+      });
   },
   async updateCustomerImage(req, res) {
     const { id } = req.user;
 
     const image = req.file;
 
-    let imageUrl;
-    if (!image) {
-      imageUrl = "";
+    if(!image){
+      return res.status(400).send({status:400,message:"please select an image"})
     }
-
-    imageUrl = image.path;
+    const imageUrl = image.filename;
 
     const findCustomer = await Customers.findCustomersUsingId(id);
     if (!findCustomer.length) {

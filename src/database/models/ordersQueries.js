@@ -9,14 +9,14 @@ const OrdersModel = {
           "${id}",
           "${rowData.price}",
           "${rowData.offered_price}"
-      );
-      SELECT * FROM farmers WHERE id=(SELECT LAST_INSERT_ID())`;
+      ) RETURNING *`;
 
-      await db.query(queryText, (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows[0]);
         }
-        return resolve(rows[1][0]);
+        return reject(err);
       });
     });
   },
@@ -36,65 +36,70 @@ const OrdersModel = {
           ON c.id = o.customer_id
         INNER JOIN products p
           ON O.product_id = p.id
-      WHERE o.id = ?
+      WHERE o.id = $1
       ORDER BY o.created_on DESC;`;
 
-      await db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   ChangeStatus(id, status) {
     return new Promise(async (resolve, reject) => {
-      const queryText = `UPDATE farmers SET is_accepted = "${status}" WHERE id = ?`;
+      const queryText = `UPDATE farmers SET is_accepted = '${status}' WHERE id = $1`;
 
-      await db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   ChangePrice(id, price) {
     return new Promise(async (resolve, reject) => {
-      const queryText = `UPDATE farmers SET offered_price = "${price}" WHERE id = ?`;
+      const queryText = `UPDATE farmers SET offered_price = '${price}' WHERE id = $1`;
 
-      await db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
 
   getOrder(id) {
     return new Promise(async (resolve, reject) => {
-      const queryText = "DSELECT * orders WHERE id = ?";
+      const queryText = "SELECT * orders WHERE id = $1";
 
-      await db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
   deleteSpecificOrder(id) {
     return new Promise(async (resolve, reject) => {
-      const queryText = "DELETE FROM orders WHERE id = ?";
+      const queryText = "DELETE FROM orders WHERE id = $1";
 
-      await db.query(queryText, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(queryText, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
@@ -115,11 +120,12 @@ const OrdersModel = {
           ON O.product_id = p.id
       ORDER BY o.created_on DESC;`;
 
-      await db.query(text, (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(text, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
@@ -141,11 +147,13 @@ const OrdersModel = {
           ON O.product_id = p.id
       WHERE o.status='pending'
       ORDER BY o.created_on DESC;`;
-      await db.query(text, (err, rows) => {
-        if (err) {
-          return reject(err);
+
+      await db.query(text, (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
@@ -165,14 +173,15 @@ const OrdersModel = {
           ON c.id = o.customer_id
         INNER JOIN products p
           ON O.product_id = p.id
-      WHERE o.customer_id=?
+      WHERE o.customer_id=$1
       ORDER BY o.created_on DESC;`;
 
-      await db.query(text, [id], (err, rows) => {
-        if (err) {
-          return reject(err);
+      await db.query(text, [id], (err, res) => {
+        if (res) {
+          const { rows } = res;
+          return resolve(rows);
         }
-        return resolve(rows);
+        return reject(err);
       });
     });
   },
