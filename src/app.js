@@ -10,7 +10,7 @@ require("./startup/routes")(app);
 // t.createTableFarmers();
 // t.createTableProfessional();
 // t.createTableInvestors();
-t.createTableProjects();
+// t.createTableProjects();
 // t.createTableProducts();
 // t.createTableOrders();
 // t.createAdmin();
